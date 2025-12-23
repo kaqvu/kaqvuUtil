@@ -76,7 +76,7 @@ function App() {
         body: JSON.stringify({
           uuid: selectedPlayer.uuid,
           type: 'disconnect',
-          content: 'jesteś czarny...'
+          content: 'Disconnected'
         })
       });
       setSelectedPlayer(null);
