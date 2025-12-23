@@ -66,6 +66,25 @@ function App() {
     }
   };
 
+  const handleDisconnect = async () => {
+    if (!selectedPlayer) return;
+
+    try {
+      await fetch('/api/send', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          uuid: selectedPlayer.uuid,
+          type: 'disconnect',
+          content: 'jesteś czarny...'
+        })
+      });
+      setSelectedPlayer(null);
+    } catch (error) {
+      console.error('Error disconnecting player:', error);
+    }
+  };
+
   const containerStyle: React.CSSProperties = {
     minHeight: '100vh',
     background: 'linear-gradient(135deg, #0f0c29, #302b63, #24243e)',
@@ -158,6 +177,21 @@ function App() {
     boxShadow: '0 4px 15px rgba(102, 126, 234, 0.4)'
   };
 
+  const disconnectButtonStyle: React.CSSProperties = {
+    padding: '12px 24px',
+    background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+    border: 'none',
+    borderRadius: '10px',
+    color: '#fff',
+    fontSize: '15px',
+    fontWeight: '600',
+    cursor: 'pointer',
+    transition: 'all 0.3s ease',
+    boxShadow: '0 4px 15px rgba(245, 87, 108, 0.4)',
+    marginTop: '20px',
+    width: '100%'
+  };
+
   const inputContainerStyle: React.CSSProperties = {
     marginBottom: '15px',
     display: 'flex',
@@ -186,6 +220,10 @@ function App() {
 
         button:active {
           transform: translateY(0);
+        }
+
+        button[style*="f093fb"]:hover {
+          box-shadow: 0 6px 20px rgba(245, 87, 108, 0.6) !important;
         }
 
         li:hover {
@@ -252,6 +290,10 @@ function App() {
               Send Command
             </button>
           </div>
+
+          <button onClick={handleDisconnect} style={disconnectButtonStyle}>
+            Disconnect Player
+          </button>
         </div>
       )}
     </div>
