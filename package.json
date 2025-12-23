@@ -1,7 +1,7 @@
 {
-  "name": "kaqvuutil-frontend",
+  "name": "kaqvuUtil",
   "private": true,
-  "version": "1.0.0",
+  "version": "1.4",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -10,7 +10,9 @@
   },
   "dependencies": {
     "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react-dom": "^18.3.1",
+    "@vercel/node": "^3.0.0",
+    "@vercel/kv": "^1.0.0"
   },
   "devDependencies": {
     "@types/react": "^18.3.3",
