@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 interface Player {
   uuid: string;
@@ -44,7 +44,7 @@ function App() {
     return () => clearInterval(interval);
   }, [isLoggedIn]);
 
-  const handleLogin = () => {
+  const handleLogin = useCallback(() => {
     if (loginInput === 'kaqvu' && passwordInput === 'k11pspro') {
       setIsLoggedIn(true);
       localStorage.setItem('kaqvu_logged_in', 'true');
@@ -52,17 +52,17 @@ function App() {
     } else {
       setLoginError('Nieprawidłowy login lub hasło!');
     }
-  };
+  }, [loginInput, passwordInput]);
 
-  const handleLogout = () => {
+  const handleLogout = useCallback(() => {
     setIsLoggedIn(false);
     localStorage.removeItem('kaqvu_logged_in');
     setSelectedPlayer(null);
     setPlayers([]);
     setIsLoading(true);
-  };
+  }, []);
 
-  const handleSendMessage = async () => {
+  const handleSendMessage = useCallback(async () => {
     if (!selectedPlayer || !message) return;
 
     try {
@@ -79,9 +79,9 @@ function App() {
     } catch (error) {
       console.error('Error sending message:', error);
     }
-  };
+  }, [selectedPlayer, message]);
 
-  const handleSendCommand = async () => {
+  const handleSendCommand = useCallback(async () => {
     if (!selectedPlayer || !command) return;
 
     try {
@@ -98,9 +98,9 @@ function App() {
     } catch (error) {
       console.error('Error sending command:', error);
     }
-  };
+  }, [selectedPlayer, command]);
 
-  const handleDisconnect = async () => {
+  const handleDisconnect = useCallback(async () => {
     if (!selectedPlayer) return;
 
     try {
@@ -117,7 +117,7 @@ function App() {
     } catch (error) {
       console.error('Error disconnecting player:', error);
     }
-  };
+  }, [selectedPlayer]);
 
   if (!isLoggedIn) {
     return (
@@ -132,6 +132,12 @@ function App() {
         <style>{`
           @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
           
+          * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+          }
+
           body {
             margin: 0;
             padding: 0;
@@ -165,7 +171,9 @@ function App() {
           border: '2px solid #00ff00',
           borderRadius: '10px',
           padding: '40px',
-          width: '400px',
+          maxWidth: '400px',
+          width: '100%',
+          margin: '20px',
           boxShadow: '0 10px 40px rgba(0, 255, 0, 0.3)',
           animation: 'slideIn 0.5s ease'
         }}>
@@ -181,53 +189,53 @@ function App() {
           </h1>
 
           <div>
-            <div style={{ marginBottom: '20px' }}>
-              <input
-                type="text"
-                placeholder="Login"
-                value={loginInput}
-                onChange={(e) => setLoginInput(e.target.value)}
-                onKeyPress={(e) => e.key === 'Enter' && handleLogin()}
-                style={{
-                  width: '100%',
-                  padding: '15px',
-                  background: '#1a1a1a',
-                  border: '2px solid #2a2a2a',
-                  borderRadius: '5px',
-                  color: '#ffffff',
-                  fontSize: '1.4rem',
-                  fontFamily: "'VT323', monospace",
-                  outline: 'none',
-                  transition: 'all 0.3s ease'
-                }}
-                onFocus={(e) => e.target.style.borderColor = '#00ff00'}
-                onBlur={(e) => e.target.style.borderColor = '#2a2a2a'}
-              />
-            </div>
+            <input
+              type="text"
+              placeholder="Login"
+              value={loginInput}
+              onChange={(e) => setLoginInput(e.target.value)}
+              onKeyPress={(e) => e.key === 'Enter' && handleLogin()}
+              style={{
+                width: '100%',
+                padding: '15px',
+                marginBottom: '15px',
+                background: '#1a1a1a',
+                border: '2px solid #2a2a2a',
+                borderRadius: '5px',
+                color: '#ffffff',
+                fontSize: '1.4rem',
+                fontFamily: "'VT323', monospace",
+                outline: 'none',
+                transition: 'all 0.3s ease',
+                boxSizing: 'border-box'
+              }}
+              onFocus={(e) => e.target.style.borderColor = '#00ff00'}
+              onBlur={(e) => e.target.style.borderColor = '#2a2a2a'}
+            />
 
-            <div style={{ marginBottom: '20px' }}>
-              <input
-                type="password"
-                placeholder="Hasło"
-                value={passwordInput}
-                onChange={(e) => setPasswordInput(e.target.value)}
-                onKeyPress={(e) => e.key === 'Enter' && handleLogin()}
-                style={{
-                  width: '100%',
-                  padding: '15px',
-                  background: '#1a1a1a',
-                  border: '2px solid #2a2a2a',
-                  borderRadius: '5px',
-                  color: '#ffffff',
-                  fontSize: '1.4rem',
-                  fontFamily: "'VT323', monospace",
-                  outline: 'none',
-                  transition: 'all 0.3s ease'
-                }}
-                onFocus={(e) => e.target.style.borderColor = '#00ff00'}
-                onBlur={(e) => e.target.style.borderColor = '#2a2a2a'}
-              />
-            </div>
+            <input
+              type="password"
+              placeholder="Hasło"
+              value={passwordInput}
+              onChange={(e) => setPasswordInput(e.target.value)}
+              onKeyPress={(e) => e.key === 'Enter' && handleLogin()}
+              style={{
+                width: '100%',
+                padding: '15px',
+                marginBottom: '15px',
+                background: '#1a1a1a',
+                border: '2px solid #2a2a2a',
+                borderRadius: '5px',
+                color: '#ffffff',
+                fontSize: '1.4rem',
+                fontFamily: "'VT323', monospace",
+                outline: 'none',
+                transition: 'all 0.3s ease',
+                boxSizing: 'border-box'
+              }}
+              onFocus={(e) => e.target.style.borderColor = '#00ff00'}
+              onBlur={(e) => e.target.style.borderColor = '#2a2a2a'}
+            />
 
             {loginError && (
               <div style={{
@@ -254,7 +262,8 @@ function App() {
                 fontFamily: "'VT323', monospace",
                 cursor: 'pointer',
                 transition: 'all 0.3s ease',
-                animation: 'pulse 2s ease-in-out infinite'
+                animation: 'pulse 2s ease-in-out infinite',
+                boxSizing: 'border-box'
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.background = 'linear-gradient(145deg, #00ff00, #00cc00)';
@@ -286,6 +295,18 @@ function App() {
         <style>{`
           @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
           
+          * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+          }
+
+          body {
+            margin: 0;
+            padding: 0;
+            background: #0a0a0a;
+          }
+
           @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
@@ -330,9 +351,16 @@ function App() {
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
         
+        * {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+        }
+
         body {
           margin: 0;
           padding: 0;
+          background: #0a0a0a;
         }
 
         @keyframes glow {
@@ -512,7 +540,7 @@ function App() {
               Sterowanie: {selectedPlayer.nick}
             </h2>
 
-            <div style={{ marginBottom: '20px', display: 'flex', gap: '10px' }}>
+            <div style={{ marginBottom: '15px', display: 'flex', gap: '10px' }}>
               <input
                 type="text"
                 placeholder="Wpisz wiadomość..."
@@ -529,7 +557,8 @@ function App() {
                   fontSize: '1.4rem',
                   fontFamily: "'VT323', monospace",
                   outline: 'none',
-                  transition: 'all 0.3s ease'
+                  transition: 'all 0.3s ease',
+                  boxSizing: 'border-box'
                 }}
               />
               <button
@@ -543,7 +572,8 @@ function App() {
                   fontSize: '1.4rem',
                   fontFamily: "'VT323', monospace",
                   cursor: 'pointer',
-                  transition: 'all 0.3s ease'
+                  transition: 'all 0.3s ease',
+                  boxSizing: 'border-box'
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.background = 'linear-gradient(145deg, #00ff00, #00cc00)';
@@ -558,7 +588,7 @@ function App() {
               </button>
             </div>
 
-            <div style={{ marginBottom: '20px', display: 'flex', gap: '10px' }}>
+            <div style={{ marginBottom: '15px', display: 'flex', gap: '10px' }}>
               <input
                 type="text"
                 placeholder="Wpisz komendę..."
@@ -575,7 +605,8 @@ function App() {
                   fontSize: '1.4rem',
                   fontFamily: "'VT323', monospace",
                   outline: 'none',
-                  transition: 'all 0.3s ease'
+                  transition: 'all 0.3s ease',
+                  boxSizing: 'border-box'
                 }}
               />
               <button
@@ -589,7 +620,8 @@ function App() {
                   fontSize: '1.4rem',
                   fontFamily: "'VT323', monospace",
                   cursor: 'pointer',
-                  transition: 'all 0.3s ease'
+                  transition: 'all 0.3s ease',
+                  boxSizing: 'border-box'
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.background = 'linear-gradient(145deg, #00ff00, #00cc00)';
@@ -600,7 +632,7 @@ function App() {
                   e.currentTarget.style.boxShadow = 'none';
                 }}
               >
-                KOMENDA
+                WYŚLIJ
               </button>
             </div>
 
@@ -616,7 +648,8 @@ function App() {
                 fontSize: '1.5rem',
                 fontFamily: "'VT323', monospace",
                 cursor: 'pointer',
-                transition: 'all 0.3s ease'
+                transition: 'all 0.3s ease',
+                boxSizing: 'border-box'
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.background = 'linear-gradient(145deg, #ff0000, #cc0000)';
