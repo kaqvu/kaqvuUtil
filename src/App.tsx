@@ -7,26 +7,60 @@ interface Player {
 }
 
 function App() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [loginInput, setLoginInput] = useState('');
+  const [passwordInput, setPasswordInput] = useState('');
+  const [loginError, setLoginError] = useState('');
   const [players, setPlayers] = useState<Player[]>([]);
   const [selectedPlayer, setSelectedPlayer] = useState<Player | null>(null);
   const [message, setMessage] = useState('');
   const [command, setCommand] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    const loggedIn = localStorage.getItem('kaqvu_logged_in');
+    if (loggedIn === 'true') {
+      setIsLoggedIn(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!isLoggedIn) return;
+
     const fetchPlayers = async () => {
       try {
         const response = await fetch('/api/players');
         const data = await response.json();
         setPlayers(data.players);
+        setIsLoading(false);
       } catch (error) {
         console.error('Error fetching players:', error);
+        setIsLoading(false);
       }
     };
 
     fetchPlayers();
     const interval = setInterval(fetchPlayers, 3000);
     return () => clearInterval(interval);
-  }, []);
+  }, [isLoggedIn]);
+
+  const handleLogin = () => {
+    if (loginInput === 'kaqvu' && passwordInput === 'k11pspro') {
+      setIsLoggedIn(true);
+      localStorage.setItem('kaqvu_logged_in', 'true');
+      setLoginError('');
+    } else {
+      setLoginError('Nieprawidłowy login lub hasło!');
+    }
+  };
+
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+    localStorage.removeItem('kaqvu_logged_in');
+    setSelectedPlayer(null);
+    setPlayers([]);
+    setIsLoading(true);
+  };
 
   const handleSendMessage = async () => {
     if (!selectedPlayer || !message) return;
@@ -85,217 +119,519 @@ function App() {
     }
   };
 
-  const containerStyle: React.CSSProperties = {
-    minHeight: '100vh',
-    background: 'linear-gradient(135deg, #0f0c29, #302b63, #24243e)',
-    color: '#fff',
-    padding: '40px 20px',
-    fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
-  };
+  if (!isLoggedIn) {
+    return (
+      <div style={{
+        minHeight: '100vh',
+        background: '#0a0a0a',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        fontFamily: "'VT323', monospace"
+      }}>
+        <style>{`
+          @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+          
+          body {
+            margin: 0;
+            padding: 0;
+            background: #0a0a0a;
+          }
 
-  const headerStyle: React.CSSProperties = {
-    textAlign: 'center',
-    fontSize: '48px',
-    fontWeight: 'bold',
-    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-    WebkitBackgroundClip: 'text',
-    WebkitTextFillColor: 'transparent',
-    marginBottom: '40px',
-    textShadow: '0 0 30px rgba(102, 126, 234, 0.5)'
-  };
+          @keyframes glow {
+            0%, 100% { text-shadow: 0 0 20px rgba(0, 255, 0, 0.5), 0 0 30px rgba(0, 255, 0, 0.3); }
+            50% { text-shadow: 0 0 30px rgba(0, 255, 0, 0.8), 0 0 40px rgba(0, 255, 0, 0.5); }
+          }
 
-  const sectionStyle: React.CSSProperties = {
-    maxWidth: '800px',
-    margin: '0 auto 40px',
-    background: 'rgba(255, 255, 255, 0.05)',
-    backdropFilter: 'blur(10px)',
-    borderRadius: '20px',
-    padding: '30px',
-    border: '1px solid rgba(255, 255, 255, 0.1)',
-    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)'
-  };
+          @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 20px rgba(0, 255, 0, 0.3); }
+            50% { box-shadow: 0 0 30px rgba(0, 255, 0, 0.6); }
+          }
 
-  const subtitleStyle: React.CSSProperties = {
-    fontSize: '24px',
-    fontWeight: '600',
-    marginBottom: '20px',
-    color: '#b8b8ff'
-  };
+          @keyframes slideIn {
+            from {
+              opacity: 0;
+              transform: translateY(-20px);
+            }
+            to {
+              opacity: 1;
+              transform: translateY(0);
+            }
+          }
+        `}</style>
 
-  const playersListStyle: React.CSSProperties = {
-    listStyle: 'none',
-    padding: 0,
-    margin: 0,
-    display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
-    gap: '15px'
-  };
+        <div style={{
+          background: 'linear-gradient(145deg, #1a1a1a, #0f0f0f)',
+          border: '2px solid #00ff00',
+          borderRadius: '10px',
+          padding: '40px',
+          width: '400px',
+          boxShadow: '0 10px 40px rgba(0, 255, 0, 0.3)',
+          animation: 'slideIn 0.5s ease'
+        }}>
+          <h1 style={{
+            fontSize: '3.5rem',
+            color: '#ffffff',
+            textAlign: 'center',
+            marginBottom: '30px',
+            animation: 'glow 2s ease-in-out infinite',
+            letterSpacing: '2px'
+          }}>
+            kaqvuUtil
+          </h1>
 
-  const getPlayerStyle = (isSelected: boolean): React.CSSProperties => ({
-    padding: '15px 20px',
-    borderRadius: '12px',
-    cursor: 'pointer',
-    background: isSelected 
-      ? 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
-      : 'rgba(255, 255, 255, 0.08)',
-    border: isSelected
-      ? '2px solid rgba(102, 126, 234, 0.8)'
-      : '2px solid rgba(255, 255, 255, 0.1)',
-    transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-    transform: 'scale(1)',
-    boxShadow: isSelected
-      ? '0 0 30px rgba(102, 126, 234, 0.6), 0 8px 16px rgba(0, 0, 0, 0.3)'
-      : '0 4px 8px rgba(0, 0, 0, 0.2)',
-    textAlign: 'center',
-    fontWeight: '500',
-    fontSize: '16px'
-  });
+          <div>
+            <div style={{ marginBottom: '20px' }}>
+              <input
+                type="text"
+                placeholder="Login"
+                value={loginInput}
+                onChange={(e) => setLoginInput(e.target.value)}
+                onKeyPress={(e) => e.key === 'Enter' && handleLogin()}
+                style={{
+                  width: '100%',
+                  padding: '15px',
+                  background: '#1a1a1a',
+                  border: '2px solid #2a2a2a',
+                  borderRadius: '5px',
+                  color: '#ffffff',
+                  fontSize: '1.4rem',
+                  fontFamily: "'VT323', monospace",
+                  outline: 'none',
+                  transition: 'all 0.3s ease'
+                }}
+                onFocus={(e) => e.target.style.borderColor = '#00ff00'}
+                onBlur={(e) => e.target.style.borderColor = '#2a2a2a'}
+              />
+            </div>
 
-  const inputStyle: React.CSSProperties = {
-    padding: '12px 16px',
-    width: 'calc(100% - 140px)',
-    background: 'rgba(255, 255, 255, 0.08)',
-    border: '2px solid rgba(255, 255, 255, 0.1)',
-    borderRadius: '10px',
-    color: '#fff',
-    fontSize: '15px',
-    outline: 'none',
-    transition: 'all 0.3s ease',
-    marginRight: '10px'
-  };
+            <div style={{ marginBottom: '20px' }}>
+              <input
+                type="password"
+                placeholder="Hasło"
+                value={passwordInput}
+                onChange={(e) => setPasswordInput(e.target.value)}
+                onKeyPress={(e) => e.key === 'Enter' && handleLogin()}
+                style={{
+                  width: '100%',
+                  padding: '15px',
+                  background: '#1a1a1a',
+                  border: '2px solid #2a2a2a',
+                  borderRadius: '5px',
+                  color: '#ffffff',
+                  fontSize: '1.4rem',
+                  fontFamily: "'VT323', monospace",
+                  outline: 'none',
+                  transition: 'all 0.3s ease'
+                }}
+                onFocus={(e) => e.target.style.borderColor = '#00ff00'}
+                onBlur={(e) => e.target.style.borderColor = '#2a2a2a'}
+              />
+            </div>
 
-  const buttonStyle: React.CSSProperties = {
-    padding: '12px 24px',
-    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-    border: 'none',
-    borderRadius: '10px',
-    color: '#fff',
-    fontSize: '15px',
-    fontWeight: '600',
-    cursor: 'pointer',
-    transition: 'all 0.3s ease',
-    boxShadow: '0 4px 15px rgba(102, 126, 234, 0.4)'
-  };
+            {loginError && (
+              <div style={{
+                color: '#ff0000',
+                fontSize: '1.3rem',
+                textAlign: 'center',
+                marginBottom: '15px',
+                textShadow: '0 0 10px rgba(255, 0, 0, 0.5)'
+              }}>
+                {loginError}
+              </div>
+            )}
 
-  const disconnectButtonStyle: React.CSSProperties = {
-    padding: '12px 24px',
-    background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
-    border: 'none',
-    borderRadius: '10px',
-    color: '#fff',
-    fontSize: '15px',
-    fontWeight: '600',
-    cursor: 'pointer',
-    transition: 'all 0.3s ease',
-    boxShadow: '0 4px 15px rgba(245, 87, 108, 0.4)',
-    marginTop: '20px',
-    width: '100%'
-  };
+            <button
+              onClick={handleLogin}
+              style={{
+                width: '100%',
+                padding: '15px',
+                background: 'linear-gradient(145deg, #00cc00, #009900)',
+                border: '2px solid #00ff00',
+                borderRadius: '5px',
+                color: '#ffffff',
+                fontSize: '1.6rem',
+                fontFamily: "'VT323', monospace",
+                cursor: 'pointer',
+                transition: 'all 0.3s ease',
+                animation: 'pulse 2s ease-in-out infinite'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = 'linear-gradient(145deg, #00ff00, #00cc00)';
+                e.currentTarget.style.transform = 'translateY(-2px)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = 'linear-gradient(145deg, #00cc00, #009900)';
+                e.currentTarget.style.transform = 'translateY(0)';
+              }}
+            >
+              ZALOGUJ
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
-  const inputContainerStyle: React.CSSProperties = {
-    marginBottom: '15px',
-    display: 'flex',
-    alignItems: 'center'
-  };
+  if (isLoading) {
+    return (
+      <div style={{
+        minHeight: '100vh',
+        background: '#0a0a0a',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        fontFamily: "'VT323', monospace"
+      }}>
+        <style>{`
+          @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+          
+          @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+          }
+
+          @keyframes glow {
+            0%, 100% { text-shadow: 0 0 20px rgba(0, 255, 0, 0.5), 0 0 30px rgba(0, 255, 0, 0.3); }
+            50% { text-shadow: 0 0 30px rgba(0, 255, 0, 0.8), 0 0 40px rgba(0, 255, 0, 0.5); }
+          }
+        `}</style>
+
+        <div style={{ textAlign: 'center' }}>
+          <div style={{
+            width: '80px',
+            height: '80px',
+            border: '4px solid #1a1a1a',
+            borderTop: '4px solid #00ff00',
+            borderRadius: '50%',
+            animation: 'spin 1s linear infinite',
+            margin: '0 auto 30px'
+          }}></div>
+          <div style={{
+            fontSize: '2.5rem',
+            color: '#ffffff',
+            animation: 'glow 2s ease-in-out infinite'
+          }}>
+            Ładowanie...
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div style={containerStyle}>
+    <div style={{
+      minHeight: '100vh',
+      background: '#0a0a0a',
+      color: '#e0e0e0',
+      fontFamily: "'VT323', monospace",
+      paddingBottom: '40px'
+    }}>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
         
         body {
           margin: 0;
           padding: 0;
         }
 
+        @keyframes glow {
+          0%, 100% { text-shadow: 0 0 20px rgba(0, 255, 0, 0.5); }
+          50% { text-shadow: 0 0 30px rgba(0, 255, 0, 0.8); }
+        }
+
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+            transform: translateY(20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
         input:focus {
-          border-color: rgba(102, 126, 234, 0.6) !important;
-          box-shadow: 0 0 20px rgba(102, 126, 234, 0.3);
+          border-color: #00ff00 !important;
+          box-shadow: 0 0 15px rgba(0, 255, 0, 0.3);
         }
 
         button:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+          transform: translateY(-2px) !important;
         }
 
         button:active {
-          transform: translateY(0);
-        }
-
-        button[style*="f093fb"]:hover {
-          box-shadow: 0 6px 20px rgba(245, 87, 108, 0.6) !important;
-        }
-
-        li:hover {
-          transform: scale(1.05) !important;
-          box-shadow: 0 0 25px rgba(102, 126, 234, 0.5), 0 8px 16px rgba(0, 0, 0, 0.3) !important;
+          transform: translateY(0) !important;
         }
 
         ::placeholder {
-          color: rgba(255, 255, 255, 0.4);
+          color: #666666;
         }
       `}</style>
 
-      <h1 style={headerStyle}>kaqvuUtil</h1>
-      
-      <div style={sectionStyle}>
-        <h2 style={subtitleStyle}>Online Players {players.length > 0 && `(${players.length})`}</h2>
-        {players.length === 0 ? (
-          <div style={{ textAlign: 'center', color: 'rgba(255, 255, 255, 0.5)', padding: '20px' }}>
-            No players online
-          </div>
-        ) : (
-          <ul style={playersListStyle}>
-            {players.map((player) => (
-              <li
-                key={player.uuid}
-                onClick={() => setSelectedPlayer(player)}
-                style={getPlayerStyle(selectedPlayer?.uuid === player.uuid)}
-              >
-                {player.nick}
-              </li>
-            ))}
-          </ul>
-        )}
+      <div style={{
+        background: 'linear-gradient(180deg, #1a1a1a 0%, #0a0a0a 100%)',
+        borderBottom: '2px solid #2a2a2a',
+        padding: '40px 20px',
+        position: 'relative'
+      }}>
+        <button
+          onClick={handleLogout}
+          style={{
+            position: 'absolute',
+            top: '20px',
+            right: '20px',
+            padding: '10px 20px',
+            background: 'linear-gradient(145deg, #cc0000, #990000)',
+            border: '2px solid #ff0000',
+            borderRadius: '5px',
+            color: '#ffffff',
+            fontSize: '1.3rem',
+            fontFamily: "'VT323', monospace",
+            cursor: 'pointer',
+            transition: 'all 0.3s ease'
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.background = 'linear-gradient(145deg, #ff0000, #cc0000)';
+            e.currentTarget.style.boxShadow = '0 0 20px rgba(255, 0, 0, 0.5)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.background = 'linear-gradient(145deg, #cc0000, #990000)';
+            e.currentTarget.style.boxShadow = 'none';
+          }}
+        >
+          WYLOGUJ
+        </button>
+
+        <h1 style={{
+          fontSize: '4rem',
+          color: '#ffffff',
+          textAlign: 'center',
+          animation: 'glow 2s ease-in-out infinite',
+          letterSpacing: '2px',
+          margin: 0
+        }}>
+          kaqvuUtil
+        </h1>
       </div>
 
-      {selectedPlayer && (
-        <div style={sectionStyle}>
-          <h2 style={subtitleStyle}>Send to {selectedPlayer.nick}</h2>
-          
-          <div style={inputContainerStyle}>
-            <input
-              type="text"
-              placeholder="Type message..."
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
-              onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
-              style={inputStyle}
-            />
-            <button onClick={handleSendMessage} style={buttonStyle}>
-              Send Message
-            </button>
-          </div>
+      <main style={{
+        maxWidth: '1400px',
+        margin: '0 auto',
+        padding: '40px 20px'
+      }}>
+        <div style={{
+          background: 'linear-gradient(145deg, #1a1a1a, #0f0f0f)',
+          border: '2px solid #2a2a2a',
+          borderRadius: '10px',
+          padding: '30px',
+          marginBottom: '40px',
+          transition: 'all 0.3s ease',
+          animation: 'fadeIn 0.5s ease'
+        }}>
+          <h2 style={{
+            fontSize: '3rem',
+            color: '#ffffff',
+            textAlign: 'center',
+            marginBottom: '30px',
+            textShadow: '0 0 15px rgba(0, 255, 0, 0.4)'
+          }}>
+            Gracze Online {players.length > 0 && `(${players.length})`}
+          </h2>
 
-          <div style={inputContainerStyle}>
-            <input
-              type="text"
-              placeholder="Type command..."
-              value={command}
-              onChange={(e) => setCommand(e.target.value)}
-              onKeyPress={(e) => e.key === 'Enter' && handleSendCommand()}
-              style={inputStyle}
-            />
-            <button onClick={handleSendCommand} style={buttonStyle}>
-              Send Command
-            </button>
-          </div>
-
-          <button onClick={handleDisconnect} style={disconnectButtonStyle}>
-            Disconnect Player
-          </button>
+          {players.length === 0 ? (
+            <div style={{
+              textAlign: 'center',
+              color: '#888888',
+              fontSize: '1.5rem',
+              padding: '40px'
+            }}>
+              Brak graczy online
+            </div>
+          ) : (
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+              gap: '20px'
+            }}>
+              {players.map((player) => (
+                <div
+                  key={player.uuid}
+                  onClick={() => setSelectedPlayer(player)}
+                  style={{
+                    padding: '20px',
+                    background: selectedPlayer?.uuid === player.uuid
+                      ? 'linear-gradient(145deg, #00cc00, #009900)'
+                      : 'linear-gradient(145deg, #1a1a1a, #0f0f0f)',
+                    border: selectedPlayer?.uuid === player.uuid
+                      ? '2px solid #00ff00'
+                      : '2px solid #2a2a2a',
+                    borderRadius: '8px',
+                    cursor: 'pointer',
+                    transition: 'all 0.3s ease',
+                    textAlign: 'center',
+                    fontSize: '1.8rem',
+                    color: '#ffffff'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = 'translateY(-5px)';
+                    e.currentTarget.style.borderColor = '#00ff00';
+                    e.currentTarget.style.boxShadow = '0 10px 30px rgba(0, 255, 0, 0.3)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = 'translateY(0)';
+                    if (selectedPlayer?.uuid !== player.uuid) {
+                      e.currentTarget.style.borderColor = '#2a2a2a';
+                      e.currentTarget.style.boxShadow = 'none';
+                    }
+                  }}
+                >
+                  {player.nick}
+                </div>
+              ))}
+            </div>
+          )}
         </div>
-      )}
+
+        {selectedPlayer && (
+          <div style={{
+            background: 'linear-gradient(145deg, #1a1a1a, #0f0f0f)',
+            border: '2px solid #2a2a2a',
+            borderRadius: '10px',
+            padding: '30px',
+            transition: 'all 0.3s ease',
+            animation: 'fadeIn 0.5s ease'
+          }}>
+            <h2 style={{
+              fontSize: '2.5rem',
+              color: '#ffffff',
+              textAlign: 'center',
+              marginBottom: '30px',
+              textShadow: '0 0 15px rgba(0, 255, 0, 0.4)'
+            }}>
+              Sterowanie: {selectedPlayer.nick}
+            </h2>
+
+            <div style={{ marginBottom: '20px', display: 'flex', gap: '10px' }}>
+              <input
+                type="text"
+                placeholder="Wpisz wiadomość..."
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
+                style={{
+                  flex: 1,
+                  padding: '15px',
+                  background: '#1a1a1a',
+                  border: '2px solid #2a2a2a',
+                  borderRadius: '5px',
+                  color: '#ffffff',
+                  fontSize: '1.4rem',
+                  fontFamily: "'VT323', monospace",
+                  outline: 'none',
+                  transition: 'all 0.3s ease'
+                }}
+              />
+              <button
+                onClick={handleSendMessage}
+                style={{
+                  padding: '15px 30px',
+                  background: 'linear-gradient(145deg, #00cc00, #009900)',
+                  border: '2px solid #00ff00',
+                  borderRadius: '5px',
+                  color: '#ffffff',
+                  fontSize: '1.4rem',
+                  fontFamily: "'VT323', monospace",
+                  cursor: 'pointer',
+                  transition: 'all 0.3s ease'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = 'linear-gradient(145deg, #00ff00, #00cc00)';
+                  e.currentTarget.style.boxShadow = '0 5px 20px rgba(0, 255, 0, 0.5)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = 'linear-gradient(145deg, #00cc00, #009900)';
+                  e.currentTarget.style.boxShadow = 'none';
+                }}
+              >
+                WYŚLIJ
+              </button>
+            </div>
+
+            <div style={{ marginBottom: '20px', display: 'flex', gap: '10px' }}>
+              <input
+                type="text"
+                placeholder="Wpisz komendę..."
+                value={command}
+                onChange={(e) => setCommand(e.target.value)}
+                onKeyPress={(e) => e.key === 'Enter' && handleSendCommand()}
+                style={{
+                  flex: 1,
+                  padding: '15px',
+                  background: '#1a1a1a',
+                  border: '2px solid #2a2a2a',
+                  borderRadius: '5px',
+                  color: '#ffffff',
+                  fontSize: '1.4rem',
+                  fontFamily: "'VT323', monospace",
+                  outline: 'none',
+                  transition: 'all 0.3s ease'
+                }}
+              />
+              <button
+                onClick={handleSendCommand}
+                style={{
+                  padding: '15px 30px',
+                  background: 'linear-gradient(145deg, #00cc00, #009900)',
+                  border: '2px solid #00ff00',
+                  borderRadius: '5px',
+                  color: '#ffffff',
+                  fontSize: '1.4rem',
+                  fontFamily: "'VT323', monospace",
+                  cursor: 'pointer',
+                  transition: 'all 0.3s ease'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = 'linear-gradient(145deg, #00ff00, #00cc00)';
+                  e.currentTarget.style.boxShadow = '0 5px 20px rgba(0, 255, 0, 0.5)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = 'linear-gradient(145deg, #00cc00, #009900)';
+                  e.currentTarget.style.boxShadow = 'none';
+                }}
+              >
+                KOMENDA
+              </button>
+            </div>
+
+            <button
+              onClick={handleDisconnect}
+              style={{
+                width: '100%',
+                padding: '15px',
+                background: 'linear-gradient(145deg, #cc0000, #990000)',
+                border: '2px solid #ff0000',
+                borderRadius: '5px',
+                color: '#ffffff',
+                fontSize: '1.5rem',
+                fontFamily: "'VT323', monospace",
+                cursor: 'pointer',
+                transition: 'all 0.3s ease'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = 'linear-gradient(145deg, #ff0000, #cc0000)';
+                e.currentTarget.style.boxShadow = '0 5px 20px rgba(255, 0, 0, 0.5)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = 'linear-gradient(145deg, #cc0000, #990000)';
+                e.currentTarget.style.boxShadow = 'none';
+              }}
+            >
+              ROZŁĄCZ GRACZA
+            </button>
+          </div>
+        )}
+      </main>
     </div>
   );
 }
