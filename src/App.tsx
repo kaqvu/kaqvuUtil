@@ -392,8 +392,23 @@ function App() {
           transform: translateY(0) !important;
         }
 
-        ::placeholder {
+		::placeholder {
           color: #666666;
+        }
+
+        .logout-btn {
+          position: absolute;
+          top: 20px;
+          right: 20px;
+        }
+
+        @media (max-width: 768px) {
+          .logout-btn {
+            font-size: 1.1rem !important;
+            padding: 8px 15px !important;
+            top: 15px;
+            right: 15px;
+          }
         }
       `}</style>
 
@@ -403,8 +418,9 @@ function App() {
         padding: '40px 20px',
         position: 'relative'
       }}>
-        <button
+		<button
           onClick={handleLogout}
+          className="logout-btn"
           style={{
             position: 'absolute',
             top: '20px',
