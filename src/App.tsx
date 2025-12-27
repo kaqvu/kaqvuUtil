@@ -354,7 +354,7 @@ function App() {
           <div style={{
             width: '80px',
             height: '80px',
-            border: '4px solid rgba(0, 255, 0, 0.1)',
+            border: '4px solid transparent',
             borderTop: '4px solid #00ff00',
             borderRadius: '50%',
             margin: '0 auto 30px',
