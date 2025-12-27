@@ -164,6 +164,41 @@ function App() {
               transform: translateY(0);
             }
           }
+          
+          @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+          }
+
+          /* Media queries dla mobilnych urządzeń */
+          @media (max-width: 768px) {
+            .send-button {
+              padding: 12px 15px !important;
+              font-size: 1.2rem !important;
+              white-space: nowrap;
+            }
+            
+            .input-field {
+              font-size: 1.2rem !important;
+              padding: 12px !important;
+            }
+            
+            .control-section {
+              padding: 20px !important;
+            }
+          }
+
+          @media (max-width: 480px) {
+            .send-button {
+              padding: 10px 12px !important;
+              font-size: 1.1rem !important;
+            }
+            
+            .input-field {
+              font-size: 1.1rem !important;
+              padding: 10px !important;
+            }
+          }
         `}</style>
 
         <div style={{
@@ -240,10 +275,10 @@ function App() {
             {loginError && (
               <div style={{
                 color: '#ff0000',
-                fontSize: '1.3rem',
                 textAlign: 'center',
                 marginBottom: '15px',
-                textShadow: '0 0 10px rgba(255, 0, 0, 0.5)'
+                fontSize: '1.3rem',
+                animation: 'pulse 1s ease-in-out'
               }}>
                 {loginError}
               </div>
@@ -258,20 +293,22 @@ function App() {
                 border: '2px solid #00ff00',
                 borderRadius: '5px',
                 color: '#ffffff',
-                fontSize: '1.6rem',
+                fontSize: '1.5rem',
                 fontFamily: "'VT323', monospace",
                 cursor: 'pointer',
                 transition: 'all 0.3s ease',
-                animation: 'pulse 2s ease-in-out infinite',
-                boxSizing: 'border-box'
+                boxSizing: 'border-box',
+                animation: 'pulse 2s ease-in-out infinite'
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.background = 'linear-gradient(145deg, #00ff00, #00cc00)';
-                e.currentTarget.style.transform = 'translateY(-2px)';
+                e.currentTarget.style.transform = 'scale(1.05)';
+                e.currentTarget.style.boxShadow = '0 10px 30px rgba(0, 255, 0, 0.5)';
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.background = 'linear-gradient(145deg, #00cc00, #009900)';
-                e.currentTarget.style.transform = 'translateY(0)';
+                e.currentTarget.style.transform = 'scale(1)';
+                e.currentTarget.style.boxShadow = 'none';
               }}
             >
               ZALOGUJ
@@ -282,71 +319,11 @@ function App() {
     );
   }
 
-  if (isLoading) {
-    return (
-      <div style={{
-        minHeight: '100vh',
-        background: '#0a0a0a',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        fontFamily: "'VT323', monospace"
-      }}>
-        <style>{`
-          @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
-          
-          * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-          }
-
-          body {
-            margin: 0;
-            padding: 0;
-            background: #0a0a0a;
-          }
-
-          @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-          }
-
-          @keyframes glow {
-            0%, 100% { text-shadow: 0 0 20px rgba(0, 255, 0, 0.5), 0 0 30px rgba(0, 255, 0, 0.3); }
-            50% { text-shadow: 0 0 30px rgba(0, 255, 0, 0.8), 0 0 40px rgba(0, 255, 0, 0.5); }
-          }
-        `}</style>
-
-        <div style={{ textAlign: 'center' }}>
-          <div style={{
-            width: '80px',
-            height: '80px',
-            border: '4px solid #1a1a1a',
-            borderTop: '4px solid #00ff00',
-            borderRadius: '50%',
-            animation: 'spin 1s linear infinite',
-            margin: '0 auto 30px'
-          }}></div>
-          <div style={{
-            fontSize: '2.5rem',
-            color: '#ffffff',
-            animation: 'glow 2s ease-in-out infinite'
-          }}>
-            Ładowanie...
-          </div>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div style={{
       minHeight: '100vh',
       background: '#0a0a0a',
-      color: '#e0e0e0',
-      fontFamily: "'VT323', monospace",
-      paddingBottom: '40px'
+      fontFamily: "'VT323', monospace"
     }}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
@@ -364,100 +341,107 @@ function App() {
         }
 
         @keyframes glow {
-          0%, 100% { text-shadow: 0 0 20px rgba(0, 255, 0, 0.5); }
-          50% { text-shadow: 0 0 30px rgba(0, 255, 0, 0.8); }
+          0%, 100% { text-shadow: 0 0 20px rgba(0, 255, 0, 0.5), 0 0 30px rgba(0, 255, 0, 0.3); }
+          50% { text-shadow: 0 0 30px rgba(0, 255, 0, 0.8), 0 0 40px rgba(0, 255, 0, 0.5); }
+        }
+
+        @keyframes pulse {
+          0%, 100% { box-shadow: 0 0 20px rgba(0, 255, 0, 0.3); }
+          50% { box-shadow: 0 0 30px rgba(0, 255, 0, 0.6); }
         }
 
         @keyframes fadeIn {
-          from {
-            opacity: 0;
-            transform: translateY(20px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
+          from { opacity: 0; }
+          to { opacity: 1; }
         }
 
-        input:focus {
-          border-color: #00ff00 !important;
-          box-shadow: 0 0 15px rgba(0, 255, 0, 0.3);
-        }
-
-        button:hover {
-          transform: translateY(-2px) !important;
-        }
-
-        button:active {
-          transform: translateY(0) !important;
-        }
-
-		::placeholder {
-          color: #666666;
-        }
-
-        .logout-btn {
-          position: absolute;
-          top: 20px;
-          right: 20px;
-        }
-
+        /* Media queries dla mobilnych urządzeń */
         @media (max-width: 768px) {
-          .logout-btn {
+          .send-button {
+            padding: 12px 15px !important;
+            font-size: 1.2rem !important;
+            white-space: nowrap;
+          }
+          
+          .input-field {
+            font-size: 1.2rem !important;
+            padding: 12px !important;
+          }
+          
+          .control-section {
+            padding: 20px !important;
+          }
+          
+          .logout-button {
+            padding: 10px 20px !important;
+            font-size: 1.2rem !important;
+          }
+        }
+
+        @media (max-width: 480px) {
+          .send-button {
+            padding: 10px 12px !important;
             font-size: 1.1rem !important;
-            padding: 8px 15px !important;
-            top: 15px;
-            right: 15px;
+          }
+          
+          .input-field {
+            font-size: 1.1rem !important;
+            padding: 10px !important;
+          }
+          
+          .logout-button {
+            padding: 8px 16px !important;
+            font-size: 1.1rem !important;
           }
         }
       `}</style>
 
-      <div style={{
-        background: 'linear-gradient(180deg, #1a1a1a 0%, #0a0a0a 100%)',
-        borderBottom: '2px solid #2a2a2a',
-        padding: '40px 20px',
-        position: 'relative'
+      <header style={{
+        background: 'linear-gradient(145deg, #1a1a1a, #0f0f0f)',
+        borderBottom: '2px solid #00ff00',
+        padding: '30px 20px',
+        textAlign: 'center'
       }}>
-		<button
+        <h1 style={{
+          fontSize: '4rem',
+          color: '#ffffff',
+          animation: 'glow 2s ease-in-out infinite',
+          letterSpacing: '2px',
+          margin: 0,
+          marginBottom: '20px'
+        }}>
+          kaqvuUtil
+        </h1>
+        
+        <button
           onClick={handleLogout}
-          className="logout-btn"
+          className="logout-button"
           style={{
-            position: 'absolute',
-            top: '20px',
-            right: '20px',
-            padding: '10px 20px',
+            padding: '12px 30px',
             background: 'linear-gradient(145deg, #cc0000, #990000)',
             border: '2px solid #ff0000',
             borderRadius: '5px',
             color: '#ffffff',
-            fontSize: '1.3rem',
+            fontSize: '1.4rem',
             fontFamily: "'VT323', monospace",
             cursor: 'pointer',
-            transition: 'all 0.3s ease'
+            transition: 'all 0.3s ease',
+            boxSizing: 'border-box'
           }}
           onMouseEnter={(e) => {
             e.currentTarget.style.background = 'linear-gradient(145deg, #ff0000, #cc0000)';
-            e.currentTarget.style.boxShadow = '0 0 20px rgba(255, 0, 0, 0.5)';
+            e.currentTarget.style.boxShadow = '0 5px 20px rgba(255, 0, 0, 0.5)';
+            e.currentTarget.style.transform = 'scale(1.05)';
           }}
           onMouseLeave={(e) => {
             e.currentTarget.style.background = 'linear-gradient(145deg, #cc0000, #990000)';
             e.currentTarget.style.boxShadow = 'none';
+            e.currentTarget.style.transform = 'scale(1)';
           }}
         >
           WYLOGUJ
         </button>
-
-        <h1 style={{
-          fontSize: '4rem',
-          color: '#ffffff',
-          textAlign: 'center',
-          animation: 'glow 2s ease-in-out infinite',
-          letterSpacing: '2px',
-          margin: 0
-        }}>
-          kaqvuUtil
-        </h1>
-      </div>
+      </header>
 
       <main style={{
         maxWidth: '1400px',
@@ -538,14 +522,17 @@ function App() {
         </div>
 
         {selectedPlayer && (
-          <div style={{
-            background: 'linear-gradient(145deg, #1a1a1a, #0f0f0f)',
-            border: '2px solid #2a2a2a',
-            borderRadius: '10px',
-            padding: '30px',
-            transition: 'all 0.3s ease',
-            animation: 'fadeIn 0.5s ease'
-          }}>
+          <div 
+            className="control-section"
+            style={{
+              background: 'linear-gradient(145deg, #1a1a1a, #0f0f0f)',
+              border: '2px solid #2a2a2a',
+              borderRadius: '10px',
+              padding: '30px',
+              transition: 'all 0.3s ease',
+              animation: 'fadeIn 0.5s ease'
+            }}
+          >
             <h2 style={{
               fontSize: '2.5rem',
               color: '#ffffff',
@@ -563,6 +550,7 @@ function App() {
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
                 onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
+                className="input-field"
                 style={{
                   flex: 1,
                   padding: '15px',
@@ -579,6 +567,7 @@ function App() {
               />
               <button
                 onClick={handleSendMessage}
+                className="send-button"
                 style={{
                   padding: '15px 30px',
                   background: 'linear-gradient(145deg, #00cc00, #009900)',
@@ -589,7 +578,8 @@ function App() {
                   fontFamily: "'VT323', monospace",
                   cursor: 'pointer',
                   transition: 'all 0.3s ease',
-                  boxSizing: 'border-box'
+                  boxSizing: 'border-box',
+                  whiteSpace: 'nowrap'
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.background = 'linear-gradient(145deg, #00ff00, #00cc00)';
@@ -611,6 +601,7 @@ function App() {
                 value={command}
                 onChange={(e) => setCommand(e.target.value)}
                 onKeyPress={(e) => e.key === 'Enter' && handleSendCommand()}
+                className="input-field"
                 style={{
                   flex: 1,
                   padding: '15px',
@@ -627,6 +618,7 @@ function App() {
               />
               <button
                 onClick={handleSendCommand}
+                className="send-button"
                 style={{
                   padding: '15px 30px',
                   background: 'linear-gradient(145deg, #00cc00, #009900)',
@@ -637,7 +629,8 @@ function App() {
                   fontFamily: "'VT323', monospace",
                   cursor: 'pointer',
                   transition: 'all 0.3s ease',
-                  boxSizing: 'border-box'
+                  boxSizing: 'border-box',
+                  whiteSpace: 'nowrap'
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.background = 'linear-gradient(145deg, #00ff00, #00cc00)';
