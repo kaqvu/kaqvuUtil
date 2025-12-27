@@ -132,6 +132,13 @@ function App() {
         <style>{`
           @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
           
+          html, body {
+            margin: 0;
+            padding: 0;
+            background: #0a0a0a;
+            overflow-x: hidden;
+          }
+
           * {
             margin: 0;
             padding: 0;
@@ -332,6 +339,19 @@ function App() {
         <style>{`
           @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
           
+          html, body {
+            margin: 0;
+            padding: 0;
+            background: #0a0a0a;
+            overflow-x: hidden;
+          }
+
+          * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+          }
+
           @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
@@ -384,6 +404,13 @@ function App() {
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
         
+        html, body {
+          margin: 0;
+          padding: 0;
+          background: #0a0a0a;
+          overflow-x: hidden;
+        }
+
         * {
           margin: 0;
           padding: 0;
