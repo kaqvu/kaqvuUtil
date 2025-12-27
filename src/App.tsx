@@ -15,7 +15,6 @@ function App() {
   const [selectedPlayer, setSelectedPlayer] = useState<Player | null>(null);
   const [message, setMessage] = useState('');
   const [command, setCommand] = useState('');
-  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const loggedIn = localStorage.getItem('kaqvu_logged_in');
@@ -32,10 +31,8 @@ function App() {
         const response = await fetch('/api/players');
         const data = await response.json();
         setPlayers(data.players);
-        setIsLoading(false);
       } catch (error) {
         console.error('Error fetching players:', error);
-        setIsLoading(false);
       }
     };
 
@@ -59,7 +56,6 @@ function App() {
     localStorage.removeItem('kaqvu_logged_in');
     setSelectedPlayer(null);
     setPlayers([]);
-    setIsLoading(true);
   }, []);
 
   const handleSendMessage = useCallback(async () => {
