@@ -15,6 +15,7 @@ function App() {
   const [selectedPlayer, setSelectedPlayer] = useState<Player | null>(null);
   const [message, setMessage] = useState('');
   const [command, setCommand] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const loggedIn = localStorage.getItem('kaqvu_logged_in');
@@ -31,8 +32,10 @@ function App() {
         const response = await fetch('/api/players');
         const data = await response.json();
         setPlayers(data.players);
+        setIsLoading(false);
       } catch (error) {
         console.error('Error fetching players:', error);
+        setIsLoading(false);
       }
     };
 
@@ -56,6 +59,7 @@ function App() {
     localStorage.removeItem('kaqvu_logged_in');
     setSelectedPlayer(null);
     setPlayers([]);
+    setIsLoading(true);
   }, []);
 
   const handleSendMessage = useCallback(async () => {
@@ -310,6 +314,62 @@ function App() {
               ZALOGUJ
             </button>
           </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (isLoggedIn && isLoading) {
+    return (
+      <div style={{
+        minHeight: '100vh',
+        background: '#0a0a0a',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        fontFamily: "'VT323', monospace"
+      }}>
+        <style>{`
+          @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+          
+          @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+          }
+
+          @keyframes glow {
+            0%, 100% { text-shadow: 0 0 20px rgba(0, 255, 0, 0.5), 0 0 30px rgba(0, 255, 0, 0.3); }
+            50% { text-shadow: 0 0 30px rgba(0, 255, 0, 0.8), 0 0 40px rgba(0, 255, 0, 0.5); }
+          }
+
+          @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 20px rgba(0, 255, 0, 0.3); }
+            50% { box-shadow: 0 0 30px rgba(0, 255, 0, 0.6); }
+          }
+        `}</style>
+
+        <div style={{
+          textAlign: 'center'
+        }}>
+          <div style={{
+            width: '80px',
+            height: '80px',
+            border: '4px solid rgba(0, 255, 0, 0.1)',
+            borderTop: '4px solid #00ff00',
+            borderRadius: '50%',
+            margin: '0 auto 30px',
+            animation: 'spin 1s linear infinite',
+            boxShadow: '0 0 20px rgba(0, 255, 0, 0.3)'
+          }}></div>
+          
+          <h2 style={{
+            fontSize: '3rem',
+            color: '#ffffff',
+            animation: 'glow 2s ease-in-out infinite',
+            letterSpacing: '2px'
+          }}>
+            Ładowanie...
+          </h2>
         </div>
       </div>
     );
