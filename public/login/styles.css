@@ -1,0 +1,292 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #000000 0%, #0a0a0a 100%);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #00ff41;
+    overflow: hidden;
+}
+
+body::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(0, 255, 65, 0.03) 1px, transparent 1px);
+    background-size: 50px 50px;
+    animation: gridMove 20s linear infinite;
+    z-index: 0;
+}
+
+@keyframes gridMove {
+    0% {
+        transform: translate(0, 0);
+    }
+    100% {
+        transform: translate(50px, 50px);
+    }
+}
+
+.login-container {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 450px;
+    padding: 20px;
+}
+
+.login-box {
+    background: rgba(0, 0, 0, 0.95);
+    border: 2px solid #00ff41;
+    border-radius: 15px;
+    padding: 50px 40px;
+    box-shadow: 
+        0 0 30px rgba(0, 255, 65, 0.5),
+        0 0 60px rgba(0, 255, 65, 0.3),
+        inset 0 0 40px rgba(0, 255, 65, 0.05);
+    position: relative;
+    overflow: hidden;
+}
+
+.login-box::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(0, 255, 65, 0.1) 0%, transparent 70%);
+    animation: rotateGlow 10s linear infinite;
+}
+
+@keyframes rotateGlow {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.login-box > * {
+    position: relative;
+    z-index: 1;
+}
+
+h1.neon-text {
+    text-align: center;
+    font-size: 3em;
+    margin-bottom: 10px;
+    color: #00ff41;
+    text-shadow: 
+        0 0 10px #00ff41,
+        0 0 20px #00ff41,
+        0 0 40px #00ff41,
+        0 0 60px #00ff41;
+    animation: neonPulse 2s ease-in-out infinite;
+    letter-spacing: 3px;
+}
+
+@keyframes neonPulse {
+    0%, 100% {
+        text-shadow: 
+            0 0 10px #00ff41,
+            0 0 20px #00ff41,
+            0 0 40px #00ff41,
+            0 0 60px #00ff41;
+    }
+    50% {
+        text-shadow: 
+            0 0 15px #00ff41,
+            0 0 30px #00ff41,
+            0 0 50px #00ff41,
+            0 0 80px #00ff41;
+    }
+}
+
+.subtitle {
+    text-align: center;
+    color: #00ff41;
+    font-size: 0.9em;
+    margin-bottom: 40px;
+    opacity: 0.8;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.input-group {
+    position: relative;
+}
+
+input[type="text"],
+input[type="password"] {
+    width: 100%;
+    background: rgba(0, 0, 0, 0.9);
+    border: 2px solid #00ff41;
+    border-radius: 8px;
+    padding: 18px 20px;
+    color: #00ff41;
+    font-size: 16px;
+    outline: none;
+    transition: all 0.3s ease;
+    box-shadow: inset 0 0 10px rgba(0, 255, 65, 0.1);
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus {
+    border-color: #00ff41;
+    box-shadow: 
+        0 0 20px rgba(0, 255, 65, 0.6),
+        inset 0 0 20px rgba(0, 255, 65, 0.2);
+    transform: translateY(-2px);
+}
+
+input[type="text"]::placeholder,
+input[type="password"]::placeholder {
+    color: rgba(0, 255, 65, 0.5);
+}
+
+.neon-button {
+    width: 100%;
+    background: rgba(0, 0, 0, 0.9);
+    border: 2px solid #00ff41;
+    border-radius: 8px;
+    padding: 18px 30px;
+    color: #00ff41;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-top: 10px;
+    position: relative;
+    overflow: hidden;
+}
+
+.neon-button::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: rgba(0, 255, 65, 0.3);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: width 0.5s, height 0.5s;
+}
+
+.neon-button:hover::before {
+    width: 300px;
+    height: 300px;
+}
+
+.neon-button:hover {
+    background: #00ff41;
+    color: #000000;
+    box-shadow: 
+        0 0 30px #00ff41,
+        0 0 60px #00ff41;
+    transform: translateY(-3px);
+}
+
+.neon-button:active {
+    transform: translateY(-1px);
+}
+
+.error-message {
+    color: #ff0041;
+    text-align: center;
+    font-size: 14px;
+    padding: 12px;
+    border-radius: 6px;
+    background: rgba(255, 0, 65, 0.1);
+    border: 1px solid #ff0041;
+    min-height: 20px;
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: all 0.3s ease;
+    margin-top: 5px;
+}
+
+.error-message.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.footer-info {
+    margin-top: 40px;
+    text-align: center;
+    opacity: 0.5;
+}
+
+.footer-info p {
+    font-size: 12px;
+    color: #00ff41;
+    letter-spacing: 1px;
+}
+
+@media (max-width: 768px) {
+    .login-container {
+        max-width: 90%;
+    }
+
+    .login-box {
+        padding: 40px 30px;
+    }
+
+    h1.neon-text {
+        font-size: 2.5em;
+    }
+
+    input[type="text"],
+    input[type="password"],
+    .neon-button {
+        padding: 15px 18px;
+        font-size: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .login-box {
+        padding: 35px 25px;
+    }
+
+    h1.neon-text {
+        font-size: 2em;
+        letter-spacing: 2px;
+    }
+
+    .subtitle {
+        font-size: 0.8em;
+        margin-bottom: 30px;
+    }
+
+    input[type="text"],
+    input[type="password"],
+    .neon-button {
+        padding: 14px 16px;
+        font-size: 14px;
+    }
+
+    .neon-button {
+        letter-spacing: 1px;
+    }
+}
