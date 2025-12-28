@@ -5,7 +5,7 @@ const errorMessage = document.getElementById('errorMessage');
 
 const CREDENTIALS = {
     login: 'kaqvu',
-    password: 'k11pspro'
+    password: 'password'
 };
 
 function checkExistingSession() {

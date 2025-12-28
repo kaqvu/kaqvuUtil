@@ -1,6 +1,6 @@
 const CREDENTIALS = {
     login: 'kaqvu',
-    password: 'k11pspro'
+    password: 'password'
 };
 
 function verifyToken(token) {

@@ -3,7 +3,7 @@ const WS_PORT = 8080;
 
 const CREDENTIALS = {
     login: 'kaqvu',
-    password: 'k11pspro'
+    password: 'password'
 };
 
 class WebSocketManager {
