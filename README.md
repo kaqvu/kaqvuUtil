@@ -173,7 +173,7 @@ W pliku `server/websocket.js`:
 ```javascript
 const CREDENTIALS = {
     login: 'kaqvu',
-    password: 'k11pspro'
+    password: 'password'
 };
 ```
 
