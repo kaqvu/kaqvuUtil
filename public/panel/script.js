@@ -37,10 +37,18 @@ function showPanel() {
     mainPanel.classList.remove('hidden');
 }
 
+function getWebSocketUrl() {
+    const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+    const host = window.location.host;
+    return `${protocol}//${host}`;
+}
+
 function connectWebSocket() {
     const token = localStorage.getItem('kaqvuToken');
+    const wsUrl = getWebSocketUrl();
     
-    ws = new WebSocket('ws://localhost:8080');
+    console.log('Connecting to:', wsUrl);
+    ws = new WebSocket(wsUrl);
 
     ws.onopen = () => {
         console.log('WebSocket connected');
@@ -55,9 +63,10 @@ function connectWebSocket() {
     ws.onmessage = (event) => {
         try {
             const data = JSON.parse(event.data);
+            console.log('Received:', data);
             
             if (data.type === 'players') {
-                players = data.players;
+                players = Array.isArray(data.players) ? data.players.filter(p => p && typeof p === 'string') : [];
                 updatePlayerList();
                 showPanel();
             }
@@ -111,6 +120,8 @@ function updatePlayerList() {
     }
 
     players.forEach(player => {
+        if (!player || typeof player !== 'string') return;
+        
         const playerItem = document.createElement('div');
         playerItem.className = 'player-item';
         if (player === currentPlayer) {

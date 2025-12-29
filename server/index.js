@@ -6,8 +6,7 @@ const sendAPI = require('./api/send');
 const disconnectAPI = require('./api/disconnect');
 const playersAPI = require('./api/players');
 
-const PORT = 3000;
-
+const PORT = process.env.PORT || 3000;
 const wsManager = new WebSocketManager();
 
 const server = http.createServer((req, res) => {
@@ -78,7 +77,7 @@ function serveFile(res, filePath, contentType) {
 function serveStaticFile(res, filePath) {
     const extname = path.extname(filePath);
     let contentType = 'text/html';
-
+    
     switch (extname) {
         case '.js':
             contentType = 'text/javascript';
@@ -110,7 +109,7 @@ function serveStaticFile(res, filePath) {
 }
 
 server.listen(PORT, () => {
-    console.log(`HTTP server running on http://localhost:${PORT}`);
+    console.log(`HTTP server running on port ${PORT}`);
 });
 
-wsManager.initialize();
+wsManager.initialize(server);

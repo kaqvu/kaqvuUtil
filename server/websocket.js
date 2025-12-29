@@ -1,5 +1,4 @@
 const WebSocket = require('ws');
-const WS_PORT = 8080;
 
 const CREDENTIALS = {
     login: 'kaqvu',
@@ -14,14 +13,14 @@ class WebSocketManager {
         this.players = new Map();
     }
 
-    initialize() {
-        this.wss = new WebSocket.Server({ port: WS_PORT });
+    initialize(server) {
+        this.wss = new WebSocket.Server({ server });
 
         this.wss.on('connection', (ws) => {
             this.handleConnection(ws);
         });
 
-        console.log(`WebSocket server running on ws://localhost:${WS_PORT}`);
+        console.log('WebSocket server initialized');
     }
 
     handleConnection(ws) {
