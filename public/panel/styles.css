@@ -660,11 +660,15 @@ textarea::placeholder {
 }
 
 @media (max-width: 768px) {
+    * {
+        animation: none !important;
+        transition: none !important;
+    }
+
     .panel-header {
         flex-direction: row;
         justify-content: space-between;
         padding: 15px 20px;
-        animation: none;
     }
 
     .header-left {
@@ -688,8 +692,6 @@ textarea::placeholder {
     .logout-button {
         padding: 8px 15px;
         font-size: 12px;
-        transition: none;
-        animation: none;
     }
 
     .logout-button::before {
@@ -699,7 +701,6 @@ textarea::placeholder {
     .logout-button:active {
         background: #ff0041;
         color: #000000;
-        transform: none;
     }
 
     .panel-content {
@@ -711,7 +712,6 @@ textarea::placeholder {
         max-height: 250px;
         border-right: none;
         border-bottom: 2px solid #00ff41;
-        animation: none;
     }
 
     .player-list {
@@ -726,26 +726,15 @@ textarea::placeholder {
     .player-item {
         min-width: 250px;
         margin-bottom: 0;
-        transition: none;
-        animation: none;
     }
 
     .player-item:active {
         background: rgba(0, 255, 65, 0.15);
-        transform: none;
     }
 
     .player-item.active {
         background: rgba(0, 255, 65, 0.2);
-        animation: none;
-    }
-
-    .player-avatar {
-        animation: none;
-    }
-
-    .player-count {
-        animation: none;
+        box-shadow: 0 0 25px rgba(0, 255, 65, 0.6);
     }
 
     .main-content {
@@ -753,42 +742,17 @@ textarea::placeholder {
         overflow-y: auto;
     }
 
-    .no-selection {
-        animation: none;
-    }
-
-    .icon-large {
-        animation: none;
-    }
-
-    .player-control {
-        animation: none;
-    }
-
     .control-header h2 {
         font-size: 1.6em;
-    }
-
-    .close-button {
-        transition: none;
     }
 
     .close-button:active {
         background: #ff0041;
         color: #000000;
-        transform: none;
-    }
-
-    .control-section {
-        transition: none;
     }
 
     .control-section:active {
         background: rgba(0, 0, 0, 0.9);
-    }
-
-    textarea {
-        transition: none;
     }
 
     .button-row {
@@ -797,7 +761,6 @@ textarea::placeholder {
 
     .action-button {
         width: 100%;
-        transition: none;
     }
 
     .action-button::before {
@@ -806,7 +769,6 @@ textarea::placeholder {
 
     .action-button:active {
         background: rgba(0, 255, 65, 0.2);
-        transform: none;
     }
 
     .action-button.primary:active {
@@ -819,15 +781,18 @@ textarea::placeholder {
         color: #000000;
     }
 
-    .status-message {
-        transition: none;
-        animation: none;
-    }
-
     .status-message.show {
         opacity: 1;
-        transform: none;
-        animation: none;
+    }
+
+    .neon-text {
+        text-shadow: 0 0 10px #00ff41, 0 0 20px #00ff41, 0 0 30px #00ff41;
+    }
+
+    .spinner {
+        border: 4px solid rgba(0, 255, 65, 0.2);
+        border-top: 4px solid #00ff41;
+        box-shadow: 0 0 30px rgba(0, 255, 65, 0.5);
     }
 }
 
