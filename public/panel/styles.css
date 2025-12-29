@@ -661,19 +661,45 @@ textarea::placeholder {
 
 @media (max-width: 768px) {
     .panel-header {
-        flex-direction: column;
-        gap: 15px;
+        flex-direction: row;
+        justify-content: space-between;
         padding: 15px 20px;
+        animation: none;
     }
 
-    .header-left,
-    .header-right {
-        width: 100%;
-        justify-content: space-between;
+    .header-left {
+        flex-direction: row;
+        align-items: center;
+        gap: 10px;
     }
 
     .header-left h1 {
-        font-size: 1.5em;
+        font-size: 1.3em;
+    }
+
+    .header-subtitle {
+        font-size: 0.75em;
+    }
+
+    .header-right {
+        gap: 10px;
+    }
+
+    .logout-button {
+        padding: 8px 15px;
+        font-size: 12px;
+        transition: none;
+        animation: none;
+    }
+
+    .logout-button::before {
+        display: none;
+    }
+
+    .logout-button:active {
+        background: #ff0041;
+        color: #000000;
+        transform: none;
     }
 
     .panel-content {
@@ -685,6 +711,7 @@ textarea::placeholder {
         max-height: 250px;
         border-right: none;
         border-bottom: 2px solid #00ff41;
+        animation: none;
     }
 
     .player-list {
@@ -697,8 +724,28 @@ textarea::placeholder {
     }
 
     .player-item {
-        min-width: 200px;
+        min-width: 250px;
         margin-bottom: 0;
+        transition: none;
+        animation: none;
+    }
+
+    .player-item:active {
+        background: rgba(0, 255, 65, 0.15);
+        transform: none;
+    }
+
+    .player-item.active {
+        background: rgba(0, 255, 65, 0.2);
+        animation: none;
+    }
+
+    .player-avatar {
+        animation: none;
+    }
+
+    .player-count {
+        animation: none;
     }
 
     .main-content {
@@ -706,8 +753,42 @@ textarea::placeholder {
         overflow-y: auto;
     }
 
+    .no-selection {
+        animation: none;
+    }
+
+    .icon-large {
+        animation: none;
+    }
+
+    .player-control {
+        animation: none;
+    }
+
     .control-header h2 {
         font-size: 1.6em;
+    }
+
+    .close-button {
+        transition: none;
+    }
+
+    .close-button:active {
+        background: #ff0041;
+        color: #000000;
+        transform: none;
+    }
+
+    .control-section {
+        transition: none;
+    }
+
+    .control-section:active {
+        background: rgba(0, 0, 0, 0.9);
+    }
+
+    textarea {
+        transition: none;
     }
 
     .button-row {
@@ -716,25 +797,61 @@ textarea::placeholder {
 
     .action-button {
         width: 100%;
+        transition: none;
+    }
+
+    .action-button::before {
+        display: none;
+    }
+
+    .action-button:active {
+        background: rgba(0, 255, 65, 0.2);
+        transform: none;
+    }
+
+    .action-button.primary:active {
+        background: #00ff41;
+        color: #000000;
+    }
+
+    .action-button.danger:active {
+        background: #ff0041;
+        color: #000000;
+    }
+
+    .status-message {
+        transition: none;
+        animation: none;
+    }
+
+    .status-message.show {
+        opacity: 1;
+        transform: none;
+        animation: none;
     }
 }
 
 @media (max-width: 480px) {
     .panel-header {
         padding: 12px 15px;
+        animation: none;
+    }
+
+    .header-left {
+        gap: 8px;
     }
 
     .header-left h1 {
-        font-size: 1.3em;
+        font-size: 1.2em;
     }
 
     .header-subtitle {
-        font-size: 0.75em;
+        font-size: 0.7em;
     }
 
     .logout-button {
-        padding: 8px 15px;
-        font-size: 12px;
+        padding: 7px 12px;
+        font-size: 11px;
     }
 
     .sidebar-header h2 {
@@ -755,6 +872,6 @@ textarea::placeholder {
     }
 
     .player-item {
-        min-width: 180px;
+        min-width: 260px;
     }
 }
