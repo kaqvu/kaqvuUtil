@@ -1,0 +1,23 @@
+{
+  "name": "kaqvuUtil",
+  "version": "2.9",
+  "description": "WebSocket panel for Minecraft server control",
+  "main": "server/index.js",
+  "scripts": {
+    "start": "node server/index.js",
+    "dev": "node server/index.js"
+  },
+  "keywords": [
+    "websocket",
+    "minecraft",
+    "panel"
+  ],
+  "author": "kaqvu",
+  "license": "MIT",
+  "dependencies": {
+    "ws": "^8.14.2"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}

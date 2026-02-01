@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>kaqvuUtil - Logowanie</title>
+    <link rel="stylesheet" href="/login/styles.css">
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-box">
+            <h1 class="neon-text">kaqvuUtil</h1>
+            <p class="subtitle">Panel Zarządzania</p>
+            
+            <form id="loginForm" class="login-form">
+                <div class="input-group">
+                    <input 
+                        type="text" 
+                        id="loginInput" 
+                        placeholder="Login" 
+                        autocomplete="username" 
+                        required
+                    >
+                </div>
+                
+                <div class="input-group">
+                    <input 
+                        type="password" 
+                        id="passwordInput" 
+                        placeholder="Hasło" 
+                        autocomplete="current-password" 
+                        required
+                    >
+                </div>
+                
+                <button type="submit" class="neon-button">
+                    Zaloguj się
+                </button>
+                
+                <div id="errorMessage" class="error-message"></div>
+            </form>
+            
+            <div class="footer-info">
+                <p>WebSocket Panel v2.0</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="/login/script.js"></script>
+</body>
+</html>
