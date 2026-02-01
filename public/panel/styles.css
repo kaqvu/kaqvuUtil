@@ -468,6 +468,95 @@ body {
     box-shadow: 0 0 30px rgba(255, 0, 65, 0.4);
 }
 
+.actions-section {
+    border-color: #00aaff;
+    box-shadow: 0 0 20px rgba(0, 170, 255, 0.2);
+}
+
+.actions-section:hover {
+    box-shadow: 0 0 30px rgba(0, 170, 255, 0.4);
+}
+
+.actions-section .section-title {
+    color: #00aaff;
+}
+
+.action-row {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.action-item {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.action-label {
+    font-size: 1em;
+    font-weight: bold;
+    color: #00aaff;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.action-input-group {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.action-input {
+    width: 100px;
+    background: rgba(0, 0, 0, 0.9);
+    border: 2px solid #00aaff;
+    border-radius: 8px;
+    padding: 12px 15px;
+    color: #00aaff;
+    font-size: 16px;
+    font-family: 'Courier New', monospace;
+    outline: none;
+    transition: all 0.3s;
+    text-align: center;
+}
+
+.action-input:focus {
+    box-shadow: 0 0 20px rgba(0, 170, 255, 0.5);
+    background: rgba(0, 170, 255, 0.05);
+}
+
+.action-input::-webkit-inner-spin-button,
+.action-input::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.action-input[type=number] {
+    -moz-appearance: textfield;
+}
+
+.action-hint {
+    font-size: 0.85em;
+    opacity: 0.6;
+    color: #00aaff;
+}
+
+.action-button.secondary {
+    border-color: #00aaff;
+    color: #00aaff;
+}
+
+.action-button.secondary::before {
+    background: rgba(0, 170, 255, 0.3);
+}
+
+.action-button.secondary:hover {
+    background: #00aaff;
+    color: #000000;
+    box-shadow: 0 0 25px rgba(0, 170, 255, 0.6);
+}
+
 .section-title {
     font-size: 1.2em;
     margin-bottom: 20px;

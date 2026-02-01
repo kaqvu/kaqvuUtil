@@ -8,25 +8,40 @@ function sendAPI(req, res, wsManager) {
     req.on('end', () => {
         try {
             const data = JSON.parse(body);
-            const { player, type, content } = data;
+            const { player, type, content, action, value } = data;
 
-            if (!player || !type || !content) {
+            if (!player) {
                 res.writeHead(400, { 'Content-Type': 'application/json' });
-                res.end(JSON.stringify({ success: false, message: 'Missing required fields' }));
-                return;
-            }
-
-            if (type !== 'message' && type !== 'command') {
-                res.writeHead(400, { 'Content-Type': 'application/json' });
-                res.end(JSON.stringify({ success: false, message: 'Invalid type' }));
+                res.end(JSON.stringify({ success: false, message: 'Missing player' }));
                 return;
             }
 
             let result;
-            if (type === 'message') {
+
+            if (type === 'message' && content) {
                 result = wsManager.sendToMinecraft(player, 'chat', { message: content });
-            } else {
+            } else if (type === 'command' && content) {
                 result = wsManager.sendToMinecraft(player, 'execute', { command: content });
+            } else if (type === 'action' && action) {
+                switch (action) {
+                    case 'setSlot':
+                        const slot = parseInt(value);
+                        if (isNaN(slot) || slot < 0 || slot > 8) {
+                            res.writeHead(400, { 'Content-Type': 'application/json' });
+                            res.end(JSON.stringify({ success: false, message: 'Slot must be 0-8' }));
+                            return;
+                        }
+                        result = wsManager.sendToMinecraft(player, 'setSlot', { slot: slot });
+                        break;
+                    default:
+                        res.writeHead(400, { 'Content-Type': 'application/json' });
+                        res.end(JSON.stringify({ success: false, message: 'Unknown action' }));
+                        return;
+                }
+            } else {
+                res.writeHead(400, { 'Content-Type': 'application/json' });
+                res.end(JSON.stringify({ success: false, message: 'Invalid request' }));
+                return;
             }
 
             res.writeHead(result.success ? 200 : 400, { 'Content-Type': 'application/json' });
