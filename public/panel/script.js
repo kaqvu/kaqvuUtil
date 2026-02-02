@@ -15,6 +15,10 @@ const slotInput = document.getElementById('slotInput');
 const setSlotButton = document.getElementById('setSlotButton');
 const leftClickButton = document.getElementById('leftClickButton');
 const rightClickButton = document.getElementById('rightClickButton');
+const guiSlotInput = document.getElementById('guiSlotInput');
+const guiShiftCheckbox = document.getElementById('guiShiftCheckbox');
+const guiLeftClickButton = document.getElementById('guiLeftClickButton');
+const guiRightClickButton = document.getElementById('guiRightClickButton');
 
 let ws = null;
 let currentPlayer = null;
@@ -287,6 +291,53 @@ leftClickButton.addEventListener('click', () => {
 rightClickButton.addEventListener('click', () => {
     sendAction('rightClick', null, 'Prawy przycisk myszy');
 });
+
+guiLeftClickButton.addEventListener('click', () => {
+    const slot = parseInt(guiSlotInput.value);
+    const shift = guiShiftCheckbox.checked;
+    sendGuiClick(slot, 0, shift);
+});
+
+guiRightClickButton.addEventListener('click', () => {
+    const slot = parseInt(guiSlotInput.value);
+    const shift = guiShiftCheckbox.checked;
+    sendGuiClick(slot, 1, shift);
+});
+
+function sendGuiClick(slot, button, shift) {
+    if (!currentPlayer) {
+        showStatus('Wybierz gracza', 'error');
+        return;
+    }
+    if (isNaN(slot) || slot < 0) {
+        showStatus('Podaj poprawny numer slotu', 'error');
+        return;
+    }
+
+    fetch('/api/send', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            player: currentPlayer,
+            type: 'action',
+            action: 'guiClick',
+            slot: slot,
+            button: button,
+            shift: shift
+        })
+    })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                const btnText = button === 0 ? 'Lewy' : 'Prawy';
+                const shiftText = shift ? ' + Shift' : '';
+                showStatus(`GUI slot ${slot}: ${btnText}${shiftText}`, 'success');
+            } else {
+                showStatus(data.message || 'Błąd', 'error');
+            }
+        })
+        .catch(() => showStatus('Błąd połączenia', 'error'));
+}
 
 function showStatus(message, type) {
     statusMessage.textContent = message;

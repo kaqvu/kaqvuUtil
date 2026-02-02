@@ -17,7 +17,7 @@ body {
 
 .neon-text {
     color: #00ff41;
-    text-shadow: 
+    text-shadow:
         0 0 10px #00ff41,
         0 0 20px #00ff41,
         0 0 30px #00ff41;
@@ -25,14 +25,17 @@ body {
 }
 
 @keyframes neonGlow {
-    0%, 100% {
-        text-shadow: 
+
+    0%,
+    100% {
+        text-shadow:
             0 0 10px #00ff41,
             0 0 20px #00ff41,
             0 0 30px #00ff41;
     }
+
     50% {
-        text-shadow: 
+        text-shadow:
             0 0 15px #00ff41,
             0 0 30px #00ff41,
             0 0 45px #00ff41,
@@ -69,8 +72,13 @@ body {
 }
 
 @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
 }
 
 .loading-content h2 {
@@ -85,8 +93,15 @@ body {
 }
 
 @keyframes pulse {
-    0%, 100% { opacity: 0.7; }
-    50% { opacity: 1; }
+
+    0%,
+    100% {
+        opacity: 0.7;
+    }
+
+    50% {
+        opacity: 1;
+    }
 }
 
 .main-panel {
@@ -112,6 +127,7 @@ body {
         transform: translateY(-100%);
         opacity: 0;
     }
+
     to {
         transform: translateY(0);
         opacity: 1;
@@ -203,6 +219,7 @@ body {
         transform: translateX(-100%);
         opacity: 0;
     }
+
     to {
         transform: translateX(0);
         opacity: 1;
@@ -232,9 +249,12 @@ body {
 }
 
 @keyframes countPulse {
-    0%, 100% {
+
+    0%,
+    100% {
         transform: scale(1);
     }
+
     50% {
         transform: scale(1.1);
     }
@@ -254,8 +274,13 @@ body {
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 0.6; }
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 0.6;
+    }
 }
 
 .player-item {
@@ -277,6 +302,7 @@ body {
         transform: translateX(-50px);
         opacity: 0;
     }
+
     to {
         transform: translateX(0);
         opacity: 1;
@@ -297,9 +323,12 @@ body {
 }
 
 @keyframes activeGlow {
-    0%, 100% {
+
+    0%,
+    100% {
         box-shadow: 0 0 25px rgba(0, 255, 65, 0.6);
     }
+
     50% {
         box-shadow: 0 0 35px rgba(0, 255, 65, 0.8);
     }
@@ -368,9 +397,12 @@ body {
 }
 
 @keyframes float {
-    0%, 100% {
+
+    0%,
+    100% {
         transform: translateY(0);
     }
+
     50% {
         transform: translateY(-10px);
     }
@@ -396,6 +428,7 @@ body {
         transform: scale(0.8);
         opacity: 0;
     }
+
     to {
         transform: scale(1);
         opacity: 1;
@@ -534,6 +567,7 @@ body {
 
 .action-input[type=number] {
     -moz-appearance: textfield;
+    appearance: textfield;
 }
 
 .action-hint {
@@ -697,9 +731,11 @@ textarea::placeholder {
     0% {
         transform: scale(0.9);
     }
+
     50% {
         transform: scale(1.02);
     }
+
     100% {
         transform: scale(1);
     }
@@ -928,4 +964,67 @@ textarea::placeholder {
     .player-item {
         min-width: 260px;
     }
+}
+
+.action-item.full-width {
+    width: 100%;
+}
+
+.gui-click-container {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.gui-click-row {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.gui-click-row .action-input {
+    flex: 1;
+    max-width: 120px;
+}
+
+.shift-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    padding: 10px 16px;
+    background: rgba(0, 255, 65, 0.1);
+    border: 1px solid rgba(0, 255, 65, 0.3);
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.shift-checkbox:hover {
+    background: rgba(0, 255, 65, 0.2);
+    border-color: rgba(0, 255, 65, 0.5);
+}
+
+.shift-checkbox input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: #00ff41;
+    cursor: pointer;
+}
+
+.shift-checkbox span {
+    color: #00ff41;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+
+.shift-checkbox:has(input:checked) {
+    background: rgba(0, 255, 65, 0.3);
+    border-color: #00ff41;
+    box-shadow: 0 0 10px rgba(0, 255, 65, 0.3);
+}
+
+.gui-click-buttons {
+    display: flex;
+    gap: 10px;
 }

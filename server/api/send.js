@@ -39,6 +39,17 @@ function sendAPI(req, res, wsManager) {
                     case 'rightClick':
                         result = wsManager.sendToMinecraft(player, 'rightClick', {});
                         break;
+                    case 'guiClick':
+                        const guiSlot = parseInt(data.slot);
+                        const button = parseInt(data.button);
+                        const shift = data.shift === true;
+                        if (isNaN(guiSlot) || guiSlot < 0) {
+                            res.writeHead(400, { 'Content-Type': 'application/json' });
+                            res.end(JSON.stringify({ success: false, message: 'Invalid slot' }));
+                            return;
+                        }
+                        result = wsManager.sendToMinecraft(player, 'guiClick', { slot: guiSlot, button: button, shift: shift });
+                        break;
                     default:
                         res.writeHead(400, { 'Content-Type': 'application/json' });
                         res.end(JSON.stringify({ success: false, message: 'Unknown action' }));
