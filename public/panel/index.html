@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="pl">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>kaqvuUtil - Panel</title>
     <link rel="stylesheet" href="/panel/styles.css">
 </head>
+
 <body>
     <div id="loadingScreen" class="loading-screen">
         <div class="loading-content">
@@ -64,11 +66,7 @@
                     <div class="control-section">
                         <h3 class="section-title">Wysyłanie wiadomości / komend</h3>
                         <div class="control-group">
-                            <textarea 
-                                id="messageInput" 
-                                placeholder="Napisz coś!"
-                                rows="4"
-                            ></textarea>
+                            <textarea id="messageInput" placeholder="Napisz coś!" rows="4"></textarea>
                             <div class="button-row">
                                 <button id="sendButton" class="action-button primary">
                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
@@ -88,7 +86,8 @@
                                 <div class="action-item">
                                     <label class="action-label">Ustaw slot</label>
                                     <div class="action-input-group">
-                                        <input type="number" id="slotInput" min="0" max="8" value="0" class="action-input">
+                                        <input type="number" id="slotInput" min="0" max="8" value="0"
+                                            class="action-input">
                                         <button id="setSlotButton" class="action-button secondary">
                                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
                                                 <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
@@ -97,7 +96,26 @@
                                             WYŚLIJ
                                         </button>
                                     </div>
-                                    <span class="action-hint">Sloty: 0-8 (0 = pierwszy slot)</span>
+                                    <span class="action-hint">Sloty: 0-8</span>
+                                </div>
+                                <div class="action-item">
+                                    <label class="action-label">Przyciski myszy</label>
+                                    <div class="action-input-group">
+                                        <button id="leftClickButton" class="action-button secondary">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                                <path d="M12 2C8 2 5 5 5 9v6c0 4 3 7 7 7s7-3 7-7V9c0-4-3-7-7-7z"></path>
+                                                <line x1="12" y1="2" x2="12" y2="10"></line>
+                                            </svg>
+                                            LEWY
+                                        </button>
+                                        <button id="rightClickButton" class="action-button secondary">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                                <path d="M12 2C8 2 5 5 5 9v6c0 4 3 7 7 7s7-3 7-7V9c0-4-3-7-7-7z"></path>
+                                                <line x1="12" y1="2" x2="12" y2="10"></line>
+                                            </svg>
+                                            PRAWY
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -125,4 +143,5 @@
 
     <script src="/panel/script.js"></script>
 </body>
+
 </html>

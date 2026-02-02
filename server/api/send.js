@@ -33,6 +33,12 @@ function sendAPI(req, res, wsManager) {
                         }
                         result = wsManager.sendToMinecraft(player, 'setSlot', { slot: slot });
                         break;
+                    case 'leftClick':
+                        result = wsManager.sendToMinecraft(player, 'leftClick', {});
+                        break;
+                    case 'rightClick':
+                        result = wsManager.sendToMinecraft(player, 'rightClick', {});
+                        break;
                     default:
                         res.writeHead(400, { 'Content-Type': 'application/json' });
                         res.end(JSON.stringify({ success: false, message: 'Unknown action' }));

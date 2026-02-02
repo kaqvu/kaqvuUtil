@@ -13,6 +13,8 @@ const disconnectButton = document.getElementById('disconnectButton');
 const statusMessage = document.getElementById('statusMessage');
 const slotInput = document.getElementById('slotInput');
 const setSlotButton = document.getElementById('setSlotButton');
+const leftClickButton = document.getElementById('leftClickButton');
+const rightClickButton = document.getElementById('rightClickButton');
 
 let ws = null;
 let currentPlayer = null;
@@ -276,6 +278,14 @@ setSlotButton.addEventListener('click', () => {
         return;
     }
     sendAction('setSlot', slot, `Slot ustawiony na ${slot + 1}`);
+});
+
+leftClickButton.addEventListener('click', () => {
+    sendAction('leftClick', null, 'Lewy przycisk myszy');
+});
+
+rightClickButton.addEventListener('click', () => {
+    sendAction('rightClick', null, 'Prawy przycisk myszy');
 });
 
 function showStatus(message, type) {
