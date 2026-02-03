@@ -50,6 +50,17 @@ function sendAPI(req, res, wsManager) {
                         }
                         result = wsManager.sendToMinecraft(player, 'guiClick', { slot: guiSlot, button: button, shift: shift });
                         break;
+                    case 'joinServer':
+                        const ip = data.ip;
+                        const port = parseInt(data.port) || 25565;
+                        const resourcePacks = data.resourcePacks === true;
+                        if (!ip) {
+                            res.writeHead(400, { 'Content-Type': 'application/json' });
+                            res.end(JSON.stringify({ success: false, message: 'Missing IP' }));
+                            return;
+                        }
+                        result = wsManager.sendToMinecraft(player, 'joinServer', { ip: ip, port: port, resourcePacks: resourcePacks });
+                        break;
                     default:
                         res.writeHead(400, { 'Content-Type': 'application/json' });
                         res.end(JSON.stringify({ success: false, message: 'Unknown action' }));

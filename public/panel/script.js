@@ -19,9 +19,19 @@ const guiSlotInput = document.getElementById('guiSlotInput');
 const guiShiftCheckbox = document.getElementById('guiShiftCheckbox');
 const guiLeftClickButton = document.getElementById('guiLeftClickButton');
 const guiRightClickButton = document.getElementById('guiRightClickButton');
+const offlinePlayerControl = document.getElementById('offlinePlayerControl');
+const offlinePlayerName = document.getElementById('offlinePlayerName');
+const closeOfflineControl = document.getElementById('closeOfflineControl');
+const serverIpInput = document.getElementById('serverIpInput');
+const serverPortInput = document.getElementById('serverPortInput');
+const joinServerButton = document.getElementById('joinServerButton');
+const offlineStatusMessage = document.getElementById('offlineStatusMessage');
+const resourcePackToggle = document.getElementById('resourcePackToggle');
 
 let ws = null;
 let currentPlayer = null;
+let currentPlayerOnline = false;
+let resourcePackEnabled = true;
 let players = [];
 let reconnectAttempts = 0;
 const MAX_RECONNECT_ATTEMPTS = 5;
@@ -118,7 +128,7 @@ function updatePlayerList() {
     if (players.length === 0) {
         const emptyDiv = document.createElement('div');
         emptyDiv.className = 'empty-list';
-        emptyDiv.innerHTML = '<p>Brak graczy online</p>';
+        emptyDiv.innerHTML = '<p>Brak graczy</p>';
         playerList.appendChild(emptyDiv);
 
         if (currentPlayer) {
@@ -129,25 +139,31 @@ function updatePlayerList() {
 
     players.forEach(player => {
         const playerName = typeof player === 'string' ? player : player.name;
-        const serverIp = typeof player === 'object' ? player.serverIp : 'Unknown';
+        const serverIp = typeof player === 'object' ? (player.serverIp || 'Menu główne') : 'Unknown';
+        const isOnline = typeof player === 'object' ? player.online === true : true;
 
         if (!playerName || typeof playerName !== 'string') return;
 
         const playerItem = document.createElement('div');
         playerItem.className = 'player-item';
+        if (!isOnline) {
+            playerItem.classList.add('offline');
+        }
         if (playerName === currentPlayer) {
             playerItem.classList.add('active');
         }
+
+        const statusText = isOnline ? serverIp : 'Menu główne';
 
         playerItem.innerHTML = `
             <div class="player-avatar">${playerName.charAt(0).toUpperCase()}</div>
             <div class="player-info">
                 <span class="player-name">${playerName}</span>
-                <span class="player-status">${serverIp}</span>
+                <span class="player-status">${statusText}</span>
             </div>
         `;
 
-        playerItem.addEventListener('click', () => selectPlayer(playerName));
+        playerItem.addEventListener('click', () => selectPlayer(playerName, isOnline));
         playerList.appendChild(playerItem);
     });
 
@@ -156,27 +172,62 @@ function updatePlayerList() {
     }
 }
 
-function selectPlayer(player) {
+function selectPlayer(player, isOnline) {
     currentPlayer = player;
+    currentPlayerOnline = isOnline;
     updatePlayerList();
 
     noSelection.classList.add('hidden');
-    playerControl.classList.remove('hidden');
-    selectedPlayerName.textContent = player;
-    messageInput.value = '';
-    statusMessage.textContent = '';
-    messageInput.focus();
+
+    if (isOnline) {
+        playerControl.classList.remove('hidden');
+        offlinePlayerControl.classList.add('hidden');
+        selectedPlayerName.textContent = player;
+        messageInput.value = '';
+        statusMessage.textContent = '';
+        messageInput.focus();
+    } else {
+        playerControl.classList.add('hidden');
+        offlinePlayerControl.classList.remove('hidden');
+        offlinePlayerName.textContent = player;
+        serverIpInput.value = '';
+        serverPortInput.value = '25565';
+        offlineStatusMessage.textContent = '';
+        resourcePackEnabled = true;
+        updateResourcePackToggle();
+        serverIpInput.focus();
+    }
 }
 
 function deselectPlayer() {
     currentPlayer = null;
+    currentPlayerOnline = false;
     updatePlayerList();
 
     noSelection.classList.remove('hidden');
     playerControl.classList.add('hidden');
+    offlinePlayerControl.classList.add('hidden');
+}
+
+function updateResourcePackToggle() {
+    if (resourcePackEnabled) {
+        resourcePackToggle.classList.remove('disabled');
+        resourcePackToggle.classList.add('enabled');
+        resourcePackToggle.querySelector('.toggle-text').textContent = 'ENABLED';
+    } else {
+        resourcePackToggle.classList.remove('enabled');
+        resourcePackToggle.classList.add('disabled');
+        resourcePackToggle.querySelector('.toggle-text').textContent = 'DISABLED';
+    }
 }
 
 closeControl.addEventListener('click', deselectPlayer);
+closeOfflineControl.addEventListener('click', deselectPlayer);
+
+resourcePackToggle.addEventListener('click', () => {
+    resourcePackEnabled = !resourcePackEnabled;
+    updateResourcePackToggle();
+});
 
 async function sendMessage() {
     const content = messageInput.value.trim();
@@ -351,6 +402,58 @@ function showStatus(message, type) {
         }, 300);
     }, 3000);
 }
+
+function showOfflineStatus(message, type) {
+    offlineStatusMessage.textContent = message;
+    offlineStatusMessage.className = `status-message ${type} show`;
+
+    setTimeout(() => {
+        offlineStatusMessage.classList.remove('show');
+        setTimeout(() => {
+            offlineStatusMessage.textContent = '';
+            offlineStatusMessage.className = 'status-message';
+        }, 300);
+    }, 3000);
+}
+
+joinServerButton.addEventListener('click', () => {
+    const ip = serverIpInput.value.trim();
+    const port = parseInt(serverPortInput.value) || 25565;
+
+    if (!ip) {
+        showOfflineStatus('Podaj adres IP serwera', 'error');
+        return;
+    }
+    if (!currentPlayer) {
+        showOfflineStatus('Wybierz gracza', 'error');
+        return;
+    }
+
+    const address = port === 25565 ? ip : `${ip}:${port}`;
+    showOfflineStatus(`Dołączanie do ${address}...`, 'info');
+
+    fetch('/api/send', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            player: currentPlayer,
+            type: 'action',
+            action: 'joinServer',
+            ip: ip,
+            port: port,
+            resourcePacks: resourcePackEnabled
+        })
+    })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                showOfflineStatus(`Dołączanie do ${address}...`, 'success');
+            } else {
+                showOfflineStatus(data.message || 'Błąd połączenia', 'error');
+            }
+        })
+        .catch(() => showOfflineStatus('Błąd połączenia z serwerem', 'error'));
+});
 
 logoutButton.addEventListener('click', () => {
     localStorage.removeItem('kaqvuToken');

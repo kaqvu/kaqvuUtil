@@ -417,6 +417,59 @@ body {
     font-size: 1.1em;
 }
 
+.join-server-container .port-input {
+    max-width: 100px;
+}
+
+.resource-pack-container {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 15px;
+}
+
+.resource-pack-label {
+    color: #ff6666;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.toggle-button {
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: 2px solid;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 100px;
+}
+
+.toggle-button.enabled {
+    background: rgba(0, 255, 65, 0.2);
+    border-color: #00ff41;
+    color: #00ff41;
+    box-shadow: 0 0 10px rgba(0, 255, 65, 0.3);
+}
+
+.toggle-button.enabled:hover {
+    background: rgba(0, 255, 65, 0.3);
+    box-shadow: 0 0 20px rgba(0, 255, 65, 0.4);
+}
+
+.toggle-button.disabled {
+    background: rgba(255, 68, 68, 0.2);
+    border-color: #ff4444;
+    color: #ff4444;
+    box-shadow: 0 0 10px rgba(255, 68, 68, 0.3);
+}
+
+.toggle-button.disabled:hover {
+    background: rgba(255, 68, 68, 0.3);
+    box-shadow: 0 0 20px rgba(255, 68, 68, 0.4);
+}
+
 .player-control {
     max-width: 900px;
     margin: 0 auto;
