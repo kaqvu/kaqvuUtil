@@ -418,7 +418,12 @@ body {
 }
 
 .join-server-container .port-input {
-    max-width: 100px;
+    max-width: 120px;
+    min-width: 100px;
+}
+
+.join-server-container .action-input:first-child {
+    min-width: 250px;
 }
 
 .resource-pack-container {
