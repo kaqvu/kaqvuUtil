@@ -81,6 +81,19 @@ class WebSocketManager {
             console.log(`[WebSocket] Player ${data.player}: online=${isOnline}, serverIp="${serverIp}"`);
             this.broadcastPlayerList();
         }
+
+        if (data.type === 'playerInfo') {
+            this.broadcastToWeb(data);
+        }
+    }
+
+    broadcastToWeb(data) {
+        const message = JSON.stringify(data);
+        this.webClients.forEach(client => {
+            if (client.readyState === WebSocket.OPEN) {
+                client.send(message);
+            }
+        });
     }
 
     sendPlayerList(ws) {
