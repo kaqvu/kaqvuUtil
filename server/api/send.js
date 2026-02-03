@@ -61,6 +61,31 @@ function sendAPI(req, res, wsManager) {
                         }
                         result = wsManager.sendToMinecraft(player, 'joinServer', { ip: ip, port: port, resourcePacks: resourcePacks });
                         break;
+                    case 'moveStart':
+                        const startDirection = data.direction;
+                        if (!startDirection) {
+                            res.writeHead(400, { 'Content-Type': 'application/json' });
+                            res.end(JSON.stringify({ success: false, message: 'Missing direction' }));
+                            return;
+                        }
+                        result = wsManager.sendToMinecraft(player, 'moveStart', { direction: startDirection });
+                        break;
+                    case 'moveStop':
+                        const stopDirection = data.direction;
+                        if (!stopDirection) {
+                            res.writeHead(400, { 'Content-Type': 'application/json' });
+                            res.end(JSON.stringify({ success: false, message: 'Missing direction' }));
+                            return;
+                        }
+                        result = wsManager.sendToMinecraft(player, 'moveStop', { direction: stopDirection });
+                        break;
+                    case 'dropItem':
+                        const stack = data.stack === true;
+                        result = wsManager.sendToMinecraft(player, 'dropItem', { stack: stack });
+                        break;
+                    case 'getInfo':
+                        result = wsManager.sendToMinecraft(player, 'getInfo', {});
+                        break;
                     default:
                         res.writeHead(400, { 'Content-Type': 'application/json' });
                         res.end(JSON.stringify({ success: false, message: 'Unknown action' }));

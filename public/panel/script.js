@@ -275,6 +275,7 @@ function selectPlayer(player, isOnline) {
     noSelection.classList.add('hidden');
 
     resetMovementStates();
+    resetInfoValues();
 
     if (isOnline) {
         playerControl.classList.remove('hidden');
@@ -315,11 +316,18 @@ function deselectPlayer() {
     offlinePlayerControl.classList.add('hidden');
 
     resetMovementStates();
+    resetInfoValues();
 
     if (infoUpdateInterval) {
         clearInterval(infoUpdateInterval);
         infoUpdateInterval = null;
     }
+}
+
+function resetInfoValues() {
+    healthValue.textContent = '-- / --';
+    hungerValue.textContent = '-- / --';
+    positionValue.textContent = '-- / -- / --';
 }
 
 function resetMovementStates() {
@@ -330,11 +338,28 @@ function resetMovementStates() {
             statusEl.textContent = '';
             statusEl.className = 'movement-status';
         }
-        const itemEl = document.querySelector(`#${key}Start`)?.closest('.movement-item');
-        if (itemEl) {
+        updateMovementItemState(key);
+    });
+}
+
+function updateMovementItemState(direction) {
+    let startBtn;
+    if (direction === 'left') {
+        startBtn = document.getElementById('leftMoveStart');
+    } else if (direction === 'right') {
+        startBtn = document.getElementById('rightMoveStart');
+    } else {
+        startBtn = document.getElementById(`${direction}Start`);
+    }
+
+    const itemEl = startBtn?.closest('.movement-item');
+    if (itemEl) {
+        if (movementStates[direction]) {
+            itemEl.classList.add('active');
+        } else {
             itemEl.classList.remove('active');
         }
-    });
+    }
 }
 
 function updateResourcePackToggle() {
@@ -518,7 +543,7 @@ function sendGuiClick(slot, button, shift) {
         .catch(() => showStatus('Błąd połączenia', 'error'));
 }
 
-function sendMovement(direction, action, duration) {
+function sendMovementAction(direction, actionType) {
     if (!currentPlayer) {
         showStatus('Wybierz gracza', 'error');
         return Promise.reject();
@@ -530,9 +555,8 @@ function sendMovement(direction, action, duration) {
         body: JSON.stringify({
             player: currentPlayer,
             type: 'action',
-            action: action,
-            direction: direction,
-            duration: duration
+            action: actionType,
+            direction: direction
         })
     })
         .then(res => res.json())
@@ -548,12 +572,12 @@ function sendMovement(direction, action, duration) {
         });
 }
 
-function setupMovementControls(direction) {
-    const startBtn = document.getElementById(`${direction}Start`);
-    const stopBtn = document.getElementById(`${direction}Stop`);
-    const timeInput = document.getElementById(`${direction}Time`);
+function setupMovementControls(direction, startBtnId, stopBtnId) {
+    const startBtn = document.getElementById(startBtnId);
+    const stopBtn = document.getElementById(stopBtnId);
     const statusEl = document.getElementById(`${direction}Status`);
-    const movementItem = startBtn.closest('.movement-item');
+
+    if (!startBtn || !stopBtn) return;
 
     startBtn.addEventListener('click', () => {
         if (movementStates[direction]) {
@@ -561,14 +585,14 @@ function setupMovementControls(direction) {
             return;
         }
 
-        const duration = parseInt(timeInput.value) || 5;
-
-        sendMovement(direction, 'moveStart', duration).then(data => {
+        sendMovementAction(direction, 'moveStart').then(data => {
             if (data.success) {
                 movementStates[direction] = true;
-                movementItem.classList.add('active');
-                statusEl.textContent = `Aktywny (${duration}s)`;
-                statusEl.className = 'movement-status active-status';
+                updateMovementItemState(direction);
+                if (statusEl) {
+                    statusEl.textContent = 'Aktywny';
+                    statusEl.className = 'movement-status active-status';
+                }
                 showNotification(`Ruch "${getDirectionName(direction)}" włączony`, 'success');
             }
         });
@@ -580,12 +604,14 @@ function setupMovementControls(direction) {
             return;
         }
 
-        sendMovement(direction, 'moveStop', 0).then(data => {
+        sendMovementAction(direction, 'moveStop').then(data => {
             if (data.success) {
                 movementStates[direction] = false;
-                movementItem.classList.remove('active');
-                statusEl.textContent = '';
-                statusEl.className = 'movement-status';
+                updateMovementItemState(direction);
+                if (statusEl) {
+                    statusEl.textContent = '';
+                    statusEl.className = 'movement-status';
+                }
                 showNotification(`Ruch "${getDirectionName(direction)}" zatrzymany`, 'info');
             }
         });
@@ -604,7 +630,12 @@ function getDirectionName(direction) {
     return names[direction] || direction;
 }
 
-['forward', 'backward', 'left', 'right', 'jump', 'sneak'].forEach(setupMovementControls);
+setupMovementControls('forward', 'forwardStart', 'forwardStop');
+setupMovementControls('backward', 'backwardStart', 'backwardStop');
+setupMovementControls('left', 'leftMoveStart', 'leftMoveStop');
+setupMovementControls('right', 'rightMoveStart', 'rightMoveStop');
+setupMovementControls('jump', 'jumpStart', 'jumpStop');
+setupMovementControls('sneak', 'sneakStart', 'sneakStop');
 
 dropItemButton.addEventListener('click', () => {
     if (!currentPlayer) {
@@ -652,7 +683,7 @@ dropStackButton.addEventListener('click', () => {
         .then(res => res.json())
         .then(data => {
             if (data.success) {
-                showStatus('Wyrzucono stos', 'success');
+                showStatus('Wyrzucono całość', 'success');
             } else {
                 showStatus(data.message || 'Błąd', 'error');
             }

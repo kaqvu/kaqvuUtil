@@ -163,11 +163,6 @@
                                         <span class="movement-label">Przód</span>
                                     </div>
                                     <div class="movement-controls">
-                                        <div class="movement-time">
-                                            <input type="number" id="forwardTime" min="1" max="999" value="5"
-                                                class="movement-input">
-                                            <span class="time-label">sek</span>
-                                        </div>
                                         <div class="movement-buttons">
                                             <button id="forwardStart" class="movement-btn start-btn">START</button>
                                             <button id="forwardStop" class="movement-btn stop-btn">STOP</button>
@@ -184,11 +179,6 @@
                                         <span class="movement-label">Tył</span>
                                     </div>
                                     <div class="movement-controls">
-                                        <div class="movement-time">
-                                            <input type="number" id="backwardTime" min="1" max="999" value="5"
-                                                class="movement-input">
-                                            <span class="time-label">sek</span>
-                                        </div>
                                         <div class="movement-buttons">
                                             <button id="backwardStart" class="movement-btn start-btn">START</button>
                                             <button id="backwardStop" class="movement-btn stop-btn">STOP</button>
@@ -205,14 +195,9 @@
                                         <span class="movement-label">Lewo</span>
                                     </div>
                                     <div class="movement-controls">
-                                        <div class="movement-time">
-                                            <input type="number" id="leftTime" min="1" max="999" value="5"
-                                                class="movement-input">
-                                            <span class="time-label">sek</span>
-                                        </div>
                                         <div class="movement-buttons">
-                                            <button id="leftStart" class="movement-btn start-btn">START</button>
-                                            <button id="leftStop" class="movement-btn stop-btn">STOP</button>
+                                            <button id="leftMoveStart" class="movement-btn start-btn">START</button>
+                                            <button id="leftMoveStop" class="movement-btn stop-btn">STOP</button>
                                         </div>
                                     </div>
                                     <div id="leftStatus" class="movement-status"></div>
@@ -226,14 +211,9 @@
                                         <span class="movement-label">Prawo</span>
                                     </div>
                                     <div class="movement-controls">
-                                        <div class="movement-time">
-                                            <input type="number" id="rightTime" min="1" max="999" value="5"
-                                                class="movement-input">
-                                            <span class="time-label">sek</span>
-                                        </div>
                                         <div class="movement-buttons">
-                                            <button id="rightStart" class="movement-btn start-btn">START</button>
-                                            <button id="rightStop" class="movement-btn stop-btn">STOP</button>
+                                            <button id="rightMoveStart" class="movement-btn start-btn">START</button>
+                                            <button id="rightMoveStop" class="movement-btn stop-btn">STOP</button>
                                         </div>
                                     </div>
                                     <div id="rightStatus" class="movement-status"></div>
@@ -247,11 +227,6 @@
                                         <span class="movement-label">Skok</span>
                                     </div>
                                     <div class="movement-controls">
-                                        <div class="movement-time">
-                                            <input type="number" id="jumpTime" min="1" max="999" value="5"
-                                                class="movement-input">
-                                            <span class="time-label">sek</span>
-                                        </div>
                                         <div class="movement-buttons">
                                             <button id="jumpStart" class="movement-btn start-btn">START</button>
                                             <button id="jumpStop" class="movement-btn stop-btn">STOP</button>
@@ -268,11 +243,6 @@
                                         <span class="movement-label">Kucanie</span>
                                     </div>
                                     <div class="movement-controls">
-                                        <div class="movement-time">
-                                            <input type="number" id="sneakTime" min="1" max="999" value="5"
-                                                class="movement-input">
-                                            <span class="time-label">sek</span>
-                                        </div>
                                         <div class="movement-buttons">
                                             <button id="sneakStart" class="movement-btn start-btn">START</button>
                                             <button id="sneakStop" class="movement-btn stop-btn">STOP</button>
@@ -349,7 +319,7 @@
                                         <line x1="18" y1="9" x2="12" y2="15"></line>
                                         <line x1="12" y1="9" x2="18" y2="15"></line>
                                     </svg>
-                                    WYRZUĆ STOS
+                                    WYRZUĆ CAŁOŚĆ
                                 </button>
                             </div>
                         </div>
