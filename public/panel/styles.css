@@ -1086,3 +1086,48 @@ textarea::placeholder {
     display: flex;
     gap: 10px;
 }
+
+.player-item.offline {
+    border-color: rgba(255, 68, 68, 0.3);
+}
+
+.player-item.offline .player-avatar {
+    background: linear-gradient(135deg, rgba(255, 68, 68, 0.3), rgba(200, 50, 50, 0.2));
+    border-color: rgba(255, 68, 68, 0.5);
+    color: #ff4444;
+}
+
+.player-item.offline .player-name {
+    color: #ff6666;
+}
+
+.player-item.offline .player-status {
+    color: rgba(255, 100, 100, 0.7);
+}
+
+.player-item.offline:hover {
+    border-color: rgba(255, 68, 68, 0.6);
+    background: rgba(255, 68, 68, 0.1);
+}
+
+.player-item.offline.active {
+    border-color: #ff4444;
+    background: rgba(255, 68, 68, 0.15);
+    box-shadow: 0 0 20px rgba(255, 68, 68, 0.2);
+}
+
+.offline-control {
+    border-color: rgba(255, 68, 68, 0.3);
+}
+
+.offline-header {
+    border-bottom-color: rgba(255, 68, 68, 0.2);
+}
+
+.offline-text {
+    color: #ff4444;
+    text-shadow:
+        0 0 10px #ff4444,
+        0 0 20px #ff4444,
+        0 0 30px #ff4444;
+}

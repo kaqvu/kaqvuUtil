@@ -53,7 +53,7 @@ class WebSocketManager {
     handleMessage(ws, data, clientType, playerName, setClientInfo) {
         if (data.type === 'auth') {
             const expectedToken = Buffer.from(`${CREDENTIALS.login}:${CREDENTIALS.password}`).toString('base64');
-            
+
             if (data.token === expectedToken) {
                 setClientInfo('web', null);
                 this.webClients.add(ws);
@@ -67,24 +67,31 @@ class WebSocketManager {
         if (data.type === 'register') {
             setClientInfo('minecraft', data.player);
             this.minecraftClients.set(data.player, ws);
-            this.players.set(data.player, { 
-                connected: true, 
-                timestamp: Date.now(),
-                serverIp: data.serverIp || 'Unknown'
-            });
-            this.broadcastPlayerList();
-        }
 
-        if (data.type === 'status' && clientType === 'minecraft') {
-            console.log(`Status from ${playerName}:`, data);
+            const isOnline = data.online === true;
+            const serverIp = data.serverIp || '';
+
+            this.players.set(data.player, {
+                connected: true,
+                timestamp: Date.now(),
+                serverIp: serverIp,
+                online: isOnline
+            });
+
+            console.log(`[WebSocket] Player ${data.player}: online=${isOnline}, serverIp="${serverIp}"`);
+            this.broadcastPlayerList();
         }
     }
 
     sendPlayerList(ws) {
         const playerList = Array.from(this.players.entries()).map(([name, data]) => ({
             name: name,
-            serverIp: data.serverIp || 'Unknown'
+            serverIp: data.serverIp || '',
+            online: data.online === true
         }));
+
+        console.log('[WebSocket] Sending player list:', JSON.stringify(playerList));
+
         ws.send(JSON.stringify({
             type: 'players',
             players: playerList
@@ -94,12 +101,16 @@ class WebSocketManager {
     broadcastPlayerList() {
         const playerList = Array.from(this.players.entries()).map(([name, data]) => ({
             name: name,
-            serverIp: data.serverIp || 'Unknown'
+            serverIp: data.serverIp || '',
+            online: data.online === true
         }));
+
         const message = JSON.stringify({
             type: 'players',
             players: playerList
         });
+
+        console.log('[WebSocket] Broadcasting player list:', JSON.stringify(playerList));
 
         this.webClients.forEach(client => {
             if (client.readyState === WebSocket.OPEN) {
@@ -114,7 +125,7 @@ class WebSocketManager {
 
     sendToMinecraft(playerName, action, data) {
         const ws = this.minecraftClients.get(playerName);
-        
+
         if (!ws || ws.readyState !== WebSocket.OPEN) {
             return { success: false, message: 'Player not connected' };
         }
