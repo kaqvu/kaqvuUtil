@@ -1060,6 +1060,7 @@ textarea::placeholder {
 .shift-checkbox:hover {
     background: rgba(0, 255, 65, 0.2);
     border-color: rgba(0, 255, 65, 0.5);
+    box-shadow: 0 0 10px rgba(0, 255, 65, 0.2);
 }
 
 .shift-checkbox input[type="checkbox"] {
@@ -1067,6 +1068,29 @@ textarea::placeholder {
     height: 18px;
     accent-color: #00ff41;
     cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    background: rgba(0, 0, 0, 0.3);
+    border: 2px solid rgba(0, 255, 65, 0.5);
+    border-radius: 4px;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.shift-checkbox input[type="checkbox"]:checked {
+    background: #00ff41;
+    border-color: #00ff41;
+}
+
+.shift-checkbox input[type="checkbox"]:checked::after {
+    content: '✓';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #0a0a0a;
+    font-size: 12px;
+    font-weight: bold;
 }
 
 .shift-checkbox span {
@@ -1079,7 +1103,23 @@ textarea::placeholder {
 .shift-checkbox:has(input:checked) {
     background: rgba(0, 255, 65, 0.3);
     border-color: #00ff41;
-    box-shadow: 0 0 10px rgba(0, 255, 65, 0.3);
+    box-shadow: 0 0 15px rgba(0, 255, 65, 0.4);
+}
+
+.gui-click-actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.gui-click-actions .shift-checkbox {
+    min-width: 100px;
+}
+
+.gui-click-actions .action-button {
+    flex: 1;
+    min-width: 120px;
 }
 
 .gui-click-buttons {

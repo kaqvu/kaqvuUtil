@@ -85,6 +85,17 @@ function connectWebSocket() {
 
             if (data.type === 'players') {
                 players = Array.isArray(data.players) ? data.players.filter(p => p && (typeof p === 'string' || (p.name && typeof p.name === 'string'))) : [];
+
+                if (currentPlayer) {
+                    const playerData = players.find(p => (typeof p === 'string' ? p : p.name) === currentPlayer);
+                    if (playerData) {
+                        const newOnlineState = typeof playerData === 'object' ? playerData.online === true : true;
+                        if (newOnlineState !== currentPlayerOnline) {
+                            selectPlayer(currentPlayer, newOnlineState);
+                        }
+                    }
+                }
+
                 updatePlayerList();
                 showPanel();
             }
